@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary">
+    
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/login_back"
+        android:scaleType="centerCrop"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="bottom|center_horizontal"
+        android:paddingLeft="60dp"
+        android:paddingRight="60dp"
+        android:paddingBottom="80dp">
+
+        <com.wrapp.floatlabelededittext.FloatLabeledEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/emailEditText"
+                android:hint="e-mail"
+                android:textColor="@android:color/white"
+                android:textColorHint="@android:color/white"
+                android:text="enkhjin@enkhjin.com"
+                android:textSize="14sp"
+                android:gravity="left"
+                />
+        </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+        <com.wrapp.floatlabelededittext.FloatLabeledEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/passwordEditText"
+                android:hint="password"
+                android:textColor="@android:color/white"
+                android:textColorHint="@android:color/white"
+                android:textSize="14sp"
+                android:inputType="textPassword"
+                android:text="1234567"
+                android:gravity="left"
+                />
+        </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:id="@+id/loginButton"
+            android:text="Login"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:padding="6dp"
+            android:gravity="center"
+            android:background="@drawable/border_login"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/registerTextView"
+        android:paddingLeft="60dp"
+        android:paddingRight="60dp"
+        android:paddingBottom="30dp"
+        android:paddingTop="20dp"
+        android:text="Sign up"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        android:layout_gravity="right|bottom"/>
+
+</FrameLayout>
