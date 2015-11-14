@@ -2,6 +2,7 @@ package mn.eq.health4men.Adapters;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,8 +16,10 @@ import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.makeramen.roundedimageview.RoundedImageView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -34,53 +37,23 @@ public class AdapterMembers extends RecyclerView.Adapter<AdapterMembers.ViewHold
     private ArrayList<MemberItem> mDataset;
     private Context context;
     private int lastPosition = -1;
-    private boolean isSpeakButtonLongPressed = false;
-    public int type;
-    public boolean isEditable = false;
-    private int duration = 100;
     public MembersFragment membersFragment;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public ImageView goodImageView;
-        public TextView goodBigPriceTextView;
-        public FrameLayout backLayout;
-        public TextView goodNameTextView;
-        public TextView goodSizeTextView;
-        public TextView goodSmallPriceTextView;
-        public TextView goodDescriptionTextView;
-        public TextView goodProducerNameTextView;
-        public ImageButton deliveryImageView;
-        public TextView goodCountEditText;
-        public ImageButton minusButton;
-        public ImageButton plusButton;
-        public ImageView goodTypeImageView;
-        public ImageButton paymentImageButton;
-        public TextView goodTypeStringTextView;
-        public TextView packageCountTextView;
-        public FrameLayout edit;
-        public CheckBox checkBox;
+        public RoundedImageView memberImageView;
+        public TextView memberNameTextView;
+        public TextView memberDistanceTextView;
+        public LinearLayout backLayout;
+        public View view;
 
         public ViewHolder(View v) {
             super(v);
-            goodImageView = (ImageView) v.findViewById(R.id.goodImageView);
-            goodBigPriceTextView = (TextView) v.findViewById(R.id.goodBigPriceTextView);
-            backLayout = (FrameLayout) v.findViewById(R.id.backLayout);
-            goodNameTextView = (TextView) v.findViewById(R.id.goodNameTextView);
-            goodSizeTextView = (TextView) v.findViewById(R.id.goodSizeTextView);
-            goodSmallPriceTextView = (TextView) v.findViewById(R.id.goodSmallPriceTextView);
-            goodDescriptionTextView = (TextView) v.findViewById(R.id.goodDescriptionTextView);
-            goodProducerNameTextView = (TextView) v.findViewById(R.id.goodProducerNameTextView);
-            deliveryImageView = (ImageButton) v.findViewById(R.id.deliveryImageView);
-            goodCountEditText = (TextView) v.findViewById(R.id.goodCountEditText);
-            minusButton = (ImageButton) v.findViewById(R.id.minusButton);
-            plusButton = (ImageButton) v.findViewById(R.id.plusButton);
-            goodTypeImageView = (ImageView) v.findViewById(R.id.goodTypeImageView);
-            paymentImageButton = (ImageButton) v.findViewById(R.id.paymentImageButton);
-            goodTypeStringTextView = (TextView) v.findViewById(R.id.goodTypeStringTextView);
-            packageCountTextView = (TextView) v.findViewById(R.id.packageCountTextView);
-            edit = (FrameLayout) v.findViewById(R.id.edit);
-            checkBox = (CheckBox) v.findViewById(R.id.good_checkbox);
+            memberImageView = (RoundedImageView) v.findViewById(R.id.memberImageView);
+            memberNameTextView = (TextView) v.findViewById(R.id.memberNameTextView);
+            memberDistanceTextView = (TextView) v.findViewById(R.id.memberDistanceTextView);
+            backLayout = (LinearLayout) v.findViewById(R.id.backLayout);
+            view = v.findViewById(R.id.onlineView);
         }
     }
 
@@ -111,51 +84,25 @@ public class AdapterMembers extends RecyclerView.Adapter<AdapterMembers.ViewHold
     public void onBindViewHolder(final ViewHolder holder, int position) {
 
         if (position == mDataset.size() - 1){
-            if (type == 0){
-                if (!companyDetailActivity.isWaitResponse)
-                    companyDetailActivity.productRequest();
-            }
+                if (!membersFragment.isWaitResponse){
+                    membersFragment.pageIndex = membersFragment.pageIndex + 1;
+                    membersFragment.getMembers();
+                }
         }
 
         final MemberItem memberItem = mDataset.get(position);
 
-        Picasso.with(context).load(memberItem.getMemberImageURL()).into(holder.goodImageView);
-        holder.goodNameTextView.setText(goodItem.getGoodName());
-        holder.goodSizeTextView.setText(goodItem.getGoodSize());
-        holder.goodDescriptionTextView.setText(goodItem.getGoodDescription());
-        holder.goodProducerNameTextView.setText(goodItem.getGoodProducerName().toUpperCase());
-
-        System.out.println(goodItem.getGoodProducerName());
-
-        holder.goodCountEditText.setText(goodItem.getGoodOrderCount() + "");
-        holder.goodTypeStringTextView.setText(goodItem.getGoodTypeString());
-        holder.packageCountTextView.setText("х/т: "+goodItem.getGoodPackageCount() + "");
-        if (goodItem.getGoodType() == 1)holder.goodTypeImageView.setImageResource(R.drawable.new_good);
-        if (goodItem.getGoodType() == 2)holder.goodTypeImageView.setImageResource(R.drawable.sale);
-        if (goodItem.getGoodType() == 3)holder.goodTypeImageView.setImageResource(R.drawable.price_up);
-        if (goodItem.getGoodType() == 4)holder.goodTypeImageView.setImageResource(R.drawable.sale);
-
-        holder.edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                holder.checkBox.setChecked(!holder.checkBox.isChecked());
-                goodItem.setIsDeletable(holder.checkBox.isChecked());
-            }
-        });
-
-//        holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                goodItem.setIsDeletable(isChecked);
-//            }
-//        });
-
-        try {
-            holder.goodSmallPriceTextView.setText("Үнэ: " + MainActivity.utils.formatUne(goodItem.getGoodPrice() + "")+"₮");
-            holder.goodBigPriceTextView.setText(MainActivity.utils.formatUne((goodItem.getGoodPrice() * goodItem.getGoodOrderCount())+"")+"₮");
-        }catch (Exception e){
-
+        if (memberItem.getMemberImageURL().length() > 3){
+            Picasso.with(context).load(memberItem.getMemberImageURL()).placeholder(R.drawable.placholder_member).into(holder.memberImageView);
+        }else {
+            holder.memberImageView.setImageResource(R.drawable.placholder_member);
         }
+
+        holder.memberNameTextView.setText(memberItem.getMemberName() + ", " + memberItem.getMemberAge());
+
+        if (memberItem.isMemberOnline())holder.view.setBackgroundResource(R.drawable.border_online);
+        else holder.view.setBackgroundResource(R.drawable.border_offline);
+
         setAnimation(holder.backLayout, position);
     }
 
@@ -166,7 +113,6 @@ public class AdapterMembers extends RecyclerView.Adapter<AdapterMembers.ViewHold
 
     private void setAnimation(View viewToAnimate, int position)
     {
-        // If the bound view wasn't previously displayed on screen, it's animated
         if (position > lastPosition)
         {
             Animation animation = AnimationUtils.loadAnimation(context, android.R.anim.slide_in_left);

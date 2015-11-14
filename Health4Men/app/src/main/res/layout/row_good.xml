@@ -1,8 +1,111 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="79dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:id="@+id/backLayout"
+    android:background="@android:color/background_light">
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_gravity="left">
+
+            <FrameLayout
+                android:layout_width="79dp"
+                android:layout_height="79dp">
+
+                <com.makeramen.roundedimageview.RoundedImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:id="@+id/memberImageView"
+                    android:scaleType="centerCrop"
+                    app:riv_corner_radius_top_left="25dp"
+                    app:riv_corner_radius_top_right="25dp"
+                    app:riv_corner_radius_bottom_left="25dp"
+                    app:riv_corner_radius_bottom_right="25dp"
+                    android:layout_gravity="center"/>
+                
+                <View
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:id="@+id/onlineView"
+                    android:background="@drawable/border_online"
+                    android:layout_gravity="right|bottom"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginBottom="16dp"
+                    />
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="8dp"
+                android:layout_gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/memberNameTextView"
+                    android:textColor="#4d4d4d"
+                    android:textSize="14sp"
+                    android:text="Нэр байхгүй, нас байхгүй"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/memberDistanceTextView"
+                    android:textColor="#bbbbbb"
+                    android:textSize="14sp"
+                    android:layout_marginTop="6dp"
+                    android:text="Тодорхойгүй"/>
+
+            </LinearLayout>
 
 
+        </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="right|center_vertical">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/messageImageView"
+                android:src="@drawable/no_message"
+                android:background="?attr/selectableItemBackground"
+                android:layout_marginRight="8dp"
+                android:padding="6dp"/>
+
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/starImageView"
+                android:src="@drawable/star_gray"
+                android:background="?attr/selectableItemBackground"
+                android:layout_marginRight="12dp"
+                android:padding="6dp"/>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#bbbbbb"
+            android:layout_marginLeft="79dp"
+            android:layout_gravity="bottom|right"/>
+
+    </FrameLayout>
+    
 </LinearLayout>

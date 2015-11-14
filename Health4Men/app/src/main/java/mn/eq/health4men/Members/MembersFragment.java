@@ -36,12 +36,14 @@ public class MembersFragment extends Fragment {
     private RecyclerView recyclerView;
     private LinearLayoutManager mLayoutManager;
     private AdapterMembers adapterMembers;
-    private int pageIndex = 1;
+    public int pageIndex = 1;
     private int perPage = 50;
     private static String TAG = "Members Fragment : ";
     private ProgressDialog progressDialog;
     private ArrayList<MemberItem> arrayList = new ArrayList<>();
     public MembersFragment membersFragment;
+    public boolean isWaitResponse;
+    public boolean canContinue = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -71,7 +73,9 @@ public class MembersFragment extends Fragment {
         recyclerView.setAdapter(adapterMembers);
     }
 
-    private void getMembers() {
+    public void getMembers() {
+
+        if (!canContinue)return;
 
         if (SplachScreenActivity.utils.isNetworkConnected(getActivity())) {
 
@@ -103,6 +107,8 @@ public class MembersFragment extends Fragment {
                         }
 
                     }
+
+                    if (response.length() < perPage)canContinue = false;
 
                     adapterMembers.notifyDataSetChanged();
 
