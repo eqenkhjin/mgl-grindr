@@ -28,34 +28,59 @@ public class UserItem implements Serializable {
     private String userEmail;
     private boolean memberOnline;
 
+    private String noInformation = "no information";
+
     public UserItem(JSONObject object) throws JSONException {
+
         this.userID = object.getInt("id");
-        this.userName = object.getString("user_nicename");
-        this.userRegisterDate = object.getString("user_registered");
-        this.userDisplayName = object.getString("display_name");
+
+        if (checkIsEmpty(object.getString("user_nicename")))this.userName = noInformation;
+        else this.userName = object.getString("user_nicename");
+
+        if (checkIsEmpty(object.getString("user_registered")))this.userRegisterDate = noInformation;
+        else this.userRegisterDate = object.getString("user_registered");
+
+        if (checkIsEmpty(object.getString("display_name")))this.userDisplayName = noInformation;
+        else this.userDisplayName = object.getString("display_name");
+
         this.userImageURL = object.getString("profile_url");
-        this.userHeight = object.getString("height");
-        this.userWeight = object.getString("weight");
-        this.userAge = object.getString("age");
-        this.userCountry = object.getString("country");
-        this.userRelationshipStatus = object.getString("relationship_status");
-        this.userAboutme = object.getString("about_me");
-        this.userBodyType = object.getString("body_type");
-        this.userLookingFor = object.getString("looking_for");
+
+        if (checkIsEmpty(object.getString("height")))this.userHeight = noInformation;
+        else this.userHeight = object.getString("height");
+
+        if (checkIsEmpty(object.getString("weight")))this.userWeight = noInformation;
+        else this.userWeight = object.getString("weight");
+
+        if (checkIsEmpty(object.getString("age")))this.userAge = noInformation;
+        else this.userAge = object.getString("age");
+
+        if (checkIsEmpty(object.getString("country")))this.userCountry = noInformation;
+        else this.userCountry = object.getString("country");
+
+        if (checkIsEmpty(object.getString("relationship_status")))this.userRelationshipStatus = noInformation;
+        else this.userRelationshipStatus = object.getString("relationship_status");
+
+        if (checkIsEmpty(object.getString("about_me")))this.userAboutme = noInformation;
+        else this.userAboutme = object.getString("about_me");
+
+        if (checkIsEmpty(object.getString("body_type")))this.userBodyType = noInformation;
+        else this.userBodyType = object.getString("body_type");
+
+        if (checkIsEmpty(object.getString("looking_for")))this.userLookingFor = noInformation;
+        else this.userLookingFor = object.getString("looking_for");
+
         this.userCoordinateX = object.getString("urtrag");
         this.userCooordinateY = object.getString("urgurug");
+
+        if (object.has("is_online")){
+            if (object.getString("is_online").equalsIgnoreCase("1"))this.memberOnline = true;
+            if (object.getString("is_online").equalsIgnoreCase("0"))this.memberOnline = false;
+        }
     }
 
-    public UserItem(JSONObject object,int i) throws JSONException {
-        this.userID = object.getInt("id");
-        this.userName = object.getString("name");
-        this.userImageURL = object.getString("profile_url");
-        this.userCoordinateX = object.getString("urtrag");
-        this.userCooordinateY = object.getString("urgurug");
-        this.userAge = object.getString("age");
-
-        if (object.getString("is_online").equalsIgnoreCase("1"))this.memberOnline = true;
-        if (object.getString("is_online").equalsIgnoreCase("0"))this.memberOnline = false;
+    private boolean checkIsEmpty(String str){
+        if (str.replace(" ","").length() == 0)return true;
+        return false;
     }
 
     public int getUserID() {

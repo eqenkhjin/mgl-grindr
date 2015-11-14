@@ -78,10 +78,10 @@ public class MembersFragment extends Fragment {
 
                         UserItem userItem = arrayList.get(position);
 
-                        Intent intent = new Intent(getActivity(), ProfileEditActivity.class);
+                        Intent intent = new Intent(getActivity(), UserDetailActivity.class);
 
                         Bundle bundle = new Bundle();
-                        bundle.putSerializable("info", userItem);
+                        bundle.putSerializable("detail", userItem);
                         intent.putExtras(bundle);
 
                         getActivity().startActivity(intent);
@@ -120,7 +120,7 @@ public class MembersFragment extends Fragment {
                     for (int i = 0 ; i < response.length() ; i ++){
 
                         try {
-                            arrayList.add(new UserItem(response.getJSONObject(i),1));
+                            arrayList.add(new UserItem(response.getJSONObject(i)));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

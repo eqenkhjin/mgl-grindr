@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -23,32 +24,28 @@ import mn.eq.health4men.R;
 /**
  * Created by eQ on 10/26/15.
  */
-public class AdapterMembers extends RecyclerView.Adapter<AdapterMembers.ViewHolder> {
+public class AdapterList extends RecyclerView.Adapter<AdapterList.ViewHolder> {
 
-    private ArrayList<UserItem> mDataset;
+    private ArrayList<String> mDataset;
     private Context context;
     private int lastPosition = -1;
     public MembersFragment membersFragment;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public RoundedImageView memberImageView;
-        public TextView memberNameTextView;
-        public TextView memberDistanceTextView;
-        public LinearLayout backLayout;
+        public TextView textView;
+        public FrameLayout backLayout;
         public View view;
 
         public ViewHolder(View v) {
             super(v);
-            memberImageView = (RoundedImageView) v.findViewById(R.id.memberImageView);
-            memberNameTextView = (TextView) v.findViewById(R.id.memberNameTextView);
-            memberDistanceTextView = (TextView) v.findViewById(R.id.memberDistanceTextView);
-            backLayout = (LinearLayout) v.findViewById(R.id.backLayout);
+            textView = (TextView) v.findViewById(R.id.textView);
+            backLayout = (FrameLayout) v.findViewById(R.id.backLayout);
             view = v.findViewById(R.id.onlineView);
         }
     }
 
-    public void add(UserItem item,int position) {
+    public void add(String item,int position) {
         mDataset.add(position, item);
         notifyItemInserted(position);
     }
@@ -58,15 +55,15 @@ public class AdapterMembers extends RecyclerView.Adapter<AdapterMembers.ViewHold
         notifyItemRemoved(position);
     }
 
-    public AdapterMembers(Context context, ArrayList<UserItem> myDataset) {
+    public AdapterList(Context context, ArrayList<String> myDataset) {
         this.context = context;
         mDataset = myDataset;
     }
 
     @Override
-    public AdapterMembers.ViewHolder onCreateViewHolder(ViewGroup parent,
+    public AdapterList.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                    int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_good, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_list, parent, false);
         ViewHolder vh = new ViewHolder(v);
         return vh;
     }
@@ -74,25 +71,8 @@ public class AdapterMembers extends RecyclerView.Adapter<AdapterMembers.ViewHold
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
 
-        if (position == mDataset.size() - 1){
-                if (!membersFragment.isWaitResponse){
-                    membersFragment.pageIndex = membersFragment.pageIndex + 1;
-                    membersFragment.getMembers();
-                }
-        }
-
-        UserItem memberItem = mDataset.get(position);
-
-        if (memberItem.getUserImageURL().length() > 3){
-            Picasso.with(context).load(memberItem.getUserImageURL()).placeholder(R.drawable.placholder_member).into(holder.memberImageView);
-        }else {
-            holder.memberImageView.setImageResource(R.drawable.placholder_member);
-        }
-
-        holder.memberNameTextView.setText(memberItem.getUserName() + ", " + memberItem.getUserAge());
-
-        if (memberItem.isMemberOnline())holder.view.setBackgroundResource(R.drawable.border_online);
-        else holder.view.setBackgroundResource(R.drawable.border_offline);
+        String memberItem = mDataset.get(position);
+        holder.textView.setText(memberItem);
 
         //setAnimation(holder.backLayout, position);
     }
