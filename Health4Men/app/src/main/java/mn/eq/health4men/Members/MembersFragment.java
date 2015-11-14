@@ -1,8 +1,8 @@
 package mn.eq.health4men.Members;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,15 +16,14 @@ import com.loopj.android.http.RequestParams;
 import org.apache.http.Header;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
 import mn.eq.health4men.Adapters.AdapterMembers;
-import mn.eq.health4men.Objects.MemberItem;
 import mn.eq.health4men.Objects.UserItem;
 import mn.eq.health4men.R;
 import mn.eq.health4men.Root.SplachScreenActivity;
+import mn.eq.health4men.Utils.RecyclerItemClickListener;
 import mn.eq.health4men.Utils.Utils;
 
 /**
@@ -40,7 +39,7 @@ public class MembersFragment extends Fragment {
     private int perPage = 50;
     private static String TAG = "Members Fragment : ";
     private ProgressDialog progressDialog;
-    private ArrayList<MemberItem> arrayList = new ArrayList<>();
+    private ArrayList<UserItem> arrayList = new ArrayList<>();
     public MembersFragment membersFragment;
     public boolean isWaitResponse;
     public boolean canContinue = true;
@@ -71,6 +70,26 @@ public class MembersFragment extends Fragment {
         adapterMembers = new AdapterMembers(getActivity(), arrayList);
         adapterMembers.membersFragment = membersFragment;
         recyclerView.setAdapter(adapterMembers);
+
+        recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+
+                        UserItem userItem = arrayList.get(position);
+
+                        Intent intent = new Intent(getActivity(), ProfileEditActivity.class);
+
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("info", userItem);
+                        intent.putExtras(bundle);
+
+                        getActivity().startActivity(intent);
+
+                    }
+                })
+        );
+
     }
 
     public void getMembers() {
@@ -101,7 +120,7 @@ public class MembersFragment extends Fragment {
                     for (int i = 0 ; i < response.length() ; i ++){
 
                         try {
-                            arrayList.add(new MemberItem(response.getJSONObject(i)));
+                            arrayList.add(new UserItem(response.getJSONObject(i),1));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

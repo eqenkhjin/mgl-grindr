@@ -1,21 +1,12 @@
 package mn.eq.health4men.Adapters;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.graphics.Color;
-import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.TranslateAnimation;
-import android.widget.CheckBox;
-import android.widget.FrameLayout;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -25,7 +16,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 import mn.eq.health4men.Members.MembersFragment;
-import mn.eq.health4men.Objects.MemberItem;
+import mn.eq.health4men.Objects.UserItem;
 import mn.eq.health4men.R;
 
 
@@ -34,7 +25,7 @@ import mn.eq.health4men.R;
  */
 public class AdapterMembers extends RecyclerView.Adapter<AdapterMembers.ViewHolder> {
 
-    private ArrayList<MemberItem> mDataset;
+    private ArrayList<UserItem> mDataset;
     private Context context;
     private int lastPosition = -1;
     public MembersFragment membersFragment;
@@ -57,7 +48,7 @@ public class AdapterMembers extends RecyclerView.Adapter<AdapterMembers.ViewHold
         }
     }
 
-    public void add(MemberItem item,int position) {
+    public void add(UserItem item,int position) {
         mDataset.add(position, item);
         notifyItemInserted(position);
     }
@@ -67,7 +58,7 @@ public class AdapterMembers extends RecyclerView.Adapter<AdapterMembers.ViewHold
         notifyItemRemoved(position);
     }
 
-    public AdapterMembers(Context context, ArrayList<MemberItem> myDataset) {
+    public AdapterMembers(Context context, ArrayList<UserItem> myDataset) {
         this.context = context;
         mDataset = myDataset;
     }
@@ -90,15 +81,15 @@ public class AdapterMembers extends RecyclerView.Adapter<AdapterMembers.ViewHold
                 }
         }
 
-        final MemberItem memberItem = mDataset.get(position);
+        UserItem memberItem = mDataset.get(position);
 
-        if (memberItem.getMemberImageURL().length() > 3){
-            Picasso.with(context).load(memberItem.getMemberImageURL()).placeholder(R.drawable.placholder_member).into(holder.memberImageView);
+        if (memberItem.getUserImageURL().length() > 3){
+            Picasso.with(context).load(memberItem.getUserImageURL()).placeholder(R.drawable.placholder_member).into(holder.memberImageView);
         }else {
             holder.memberImageView.setImageResource(R.drawable.placholder_member);
         }
 
-        holder.memberNameTextView.setText(memberItem.getMemberName() + ", " + memberItem.getMemberAge());
+        holder.memberNameTextView.setText(memberItem.getUserName() + ", " + memberItem.getUserAge());
 
         if (memberItem.isMemberOnline())holder.view.setBackgroundResource(R.drawable.border_online);
         else holder.view.setBackgroundResource(R.drawable.border_offline);

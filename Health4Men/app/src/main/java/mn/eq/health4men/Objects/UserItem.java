@@ -26,6 +26,7 @@ public class UserItem implements Serializable {
     private String userCoordinateX;
     private String userCooordinateY;
     private String userEmail;
+    private boolean memberOnline;
 
     public UserItem(JSONObject object) throws JSONException {
         this.userID = object.getInt("id");
@@ -43,6 +44,18 @@ public class UserItem implements Serializable {
         this.userLookingFor = object.getString("looking_for");
         this.userCoordinateX = object.getString("urtrag");
         this.userCooordinateY = object.getString("urgurug");
+    }
+
+    public UserItem(JSONObject object,int i) throws JSONException {
+        this.userID = object.getInt("id");
+        this.userName = object.getString("name");
+        this.userImageURL = object.getString("profile_url");
+        this.userCoordinateX = object.getString("urtrag");
+        this.userCooordinateY = object.getString("urgurug");
+        this.userAge = object.getString("age");
+
+        if (object.getString("is_online").equalsIgnoreCase("1"))this.memberOnline = true;
+        if (object.getString("is_online").equalsIgnoreCase("0"))this.memberOnline = false;
     }
 
     public int getUserID() {
@@ -171,5 +184,13 @@ public class UserItem implements Serializable {
 
     public void setUserEmail(String userEmail) {
         this.userEmail = userEmail;
+    }
+
+    public boolean isMemberOnline() {
+        return memberOnline;
+    }
+
+    public void setMemberOnline(boolean memberOnline) {
+        this.memberOnline = memberOnline;
     }
 }
