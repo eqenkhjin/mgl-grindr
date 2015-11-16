@@ -79,11 +79,11 @@ public class ChatActivity extends AppCompatActivity {
 
         chatActivity = this;
 
-        configHeader();
 
         Bundle bundle = getIntent().getExtras();
 
         userItem = (UserItem) bundle.getSerializable("chat_user");
+        configHeader();
 
         init();
 
@@ -165,7 +165,7 @@ public class ChatActivity extends AppCompatActivity {
         });
 
         TextView headerTitleTextView = (TextView) findViewById(R.id.toolbarTitle);
-        headerTitleTextView.setText("Зурвас");
+        headerTitleTextView.setText(userItem.getUserName()+", "+userItem.getUserAge());
     }
 
     public void init() {

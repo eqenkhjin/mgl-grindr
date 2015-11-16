@@ -31,4 +31,5 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:1.2.1'
     compile 'com.cocosw:bottomsheet:1.+@aar'
     compile files('libs/httpcore-4.4.jar')
+    compile 'com.google.android.gms:play-services:4.2.42'
 }

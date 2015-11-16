@@ -60,7 +60,7 @@ public class ChatAdapter extends BaseAdapter {
         if(convertView==null)
             vi = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.cell_chat, null, false);
 
-            if (!zurvasItem.isMyMessage){
+            if (zurvasItem.isMyMessage){
                 LinearLayout teacher = (LinearLayout)vi.findViewById(R.id.cellUser);
                 teacher.setVisibility(View.VISIBLE);
 
@@ -100,7 +100,7 @@ public class ChatAdapter extends BaseAdapter {
         zurvasHolder.title.setText(zurvasItem.userName);
         zurvasHolder.body.setText(zurvasItem.body);
 
-        zurvasHolder.date.setText(getDateStr(zurvasItem.date));
+        zurvasHolder.date.setText(zurvasItem.date.replace("-","."));
 
         if (zurvasItem.isRead){
             zurvasHolder.isRead.setText("Уншсан");

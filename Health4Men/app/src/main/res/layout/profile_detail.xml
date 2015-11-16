@@ -2,7 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:orientation="vertical"
+    android:background="@color/backgroundLight">
+
+    <include layout="@layout/push_toolbar" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -45,7 +48,7 @@
                         android:text="This is field of user's name"
                         android:textColor="#ffffff"
                         android:textSize="17sp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -67,21 +70,20 @@
             </LinearLayout>
 
             <ImageButton
+                android:id="@+id/newMessage"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
-                android:background="?attr/selectableItemBackground"
                 android:layout_margin="10dp"
-                android:src="@drawable/message_white"
-                android:id="@+id/newMessage"/>
+                android:background="?attr/selectableItemBackground"
+                android:src="@drawable/message_white" />
 
         </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:background="@color/backgroundLight"
             android:orientation="vertical"
             android:paddingLeft="20dp"
@@ -93,6 +95,7 @@
                 android:layout_height="wrap_content"
                 android:maxLines="3"
                 android:paddingBottom="15dp"
+                android:paddingTop="15dp"
                 android:text="This field is created to write about your status or something"
                 android:textColor="#bbbbbb"
                 android:textSize="14dp" />

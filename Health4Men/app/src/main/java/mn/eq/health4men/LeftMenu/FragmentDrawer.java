@@ -59,6 +59,7 @@ public class FragmentDrawer extends Fragment {
 
         data.add(new NavDrawerItem("Members",R.drawable.members));
         data.add(new NavDrawerItem("Map",R.drawable.map));
+        data.add(new NavDrawerItem("Profile edit",R.drawable.icon_edit));
         data.add(new NavDrawerItem("Log out",R.drawable.logout));
 
         return data;

@@ -1,7 +1,9 @@
 package mn.eq.health4men.Root;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -31,6 +33,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import mn.eq.health4men.LeftMenu.FragmentDrawer;
+import mn.eq.health4men.Login.LoginActivity;
+import mn.eq.health4men.Map.FragmentMap;
 import mn.eq.health4men.Members.MembersFragment;
 import mn.eq.health4men.R;
 import mn.eq.health4men.Root.RootActivity;
@@ -128,7 +132,7 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
         if (position == 1) {
             title = "Map";
 
-            fragment = new MembersFragment();
+            fragment = new FragmentMap();
 
         }
 
@@ -141,11 +145,20 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
 
         }
 
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.container, fragment);
-        fragmentTransaction.commit();
+        if (position == 3) {
 
-        toolbarTitle.setText(title);
+            Intent intent = new Intent(MainActivity.this,LoginActivity.class);
+            startActivity(intent);
+
+            finish();
+
+        }else {
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.container, fragment);
+            fragmentTransaction.commit();
+
+            toolbarTitle.setText(title);
+        }
 
     }
 
@@ -225,5 +238,23 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
 
     }
 
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.app_name_mn))
+                .setMessage(getString(R.string.quit))
+                .setPositiveButton("Quit", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                })
+                .setIcon(R.drawable.alert_logo)
+                .show();
 
+    }
 }

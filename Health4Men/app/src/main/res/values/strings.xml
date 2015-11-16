@@ -5,9 +5,9 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
-    <string name="quit">Аппликейшнээс гарах уу?</string>
-    <string name="no_internet">Интернет холболт байхгүй байна</string>
-    <string name="error">Мэдээлэл авахад алдаа гарлаа</string>
-    <string name="loading">Ачааллаж байна</string>
+    <string name="quit">Are you sure want to quit application?</string>
+    <string name="no_internet">No internet connection</string>
+    <string name="error">There was a problem retrieving information</string>
+    <string name="loading">Loading</string>
 
 </resources>

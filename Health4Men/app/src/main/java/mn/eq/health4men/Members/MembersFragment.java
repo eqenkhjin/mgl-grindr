@@ -43,7 +43,7 @@ public class MembersFragment extends Fragment {
     private int perPage = 50;
     private static String TAG = "Members Fragment : ";
     private ProgressDialog progressDialog;
-    private ArrayList<UserItem> arrayList = new ArrayList<>();
+    public static ArrayList<UserItem> arrayList = new ArrayList<>();
     public MembersFragment membersFragment;
     public boolean isWaitResponse;
     public boolean canContinue = true;

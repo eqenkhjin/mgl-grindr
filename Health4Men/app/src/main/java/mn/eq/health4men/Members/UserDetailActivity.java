@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import mn.eq.health4men.Chat.ChatActivity;
@@ -38,6 +39,8 @@ public class UserDetailActivity extends FragmentActivity {
 
         initData();
 
+        configHeader();
+
     }
 
     private void initData(){
@@ -64,6 +67,19 @@ public class UserDetailActivity extends FragmentActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    private void configHeader() {
+        ImageView backImageView = (ImageView) findViewById(R.id.menuIcon);
+        backImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
+        TextView headerTitleTextView = (TextView) findViewById(R.id.toolbarTitle);
+        headerTitleTextView.setText("Profile");
     }
 
 }
