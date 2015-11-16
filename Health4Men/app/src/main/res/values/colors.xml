@@ -8,4 +8,8 @@
     <color name="navigationBarColor">#fa8e66</color>
 
     <color name="backgroundLight">#f5f7fa</color>
+    <color name="descriptionColor">#545a5f</color>
+    <color name="lightTextColor">#a1aeb7</color>
+    <color name="mainGray">#a1aeb7</color>
+
 </resources>

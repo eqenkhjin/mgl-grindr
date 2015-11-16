@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.cocosw.bottomsheet.BottomSheet;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.squareup.picasso.Picasso;
 
 import org.apache.http.Header;
 import org.json.JSONException;
@@ -198,6 +199,11 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
                                 SplachScreenActivity.utils.showAlert(MainActivity.this, response.getString("message"));
                             } else {
                                 SplachScreenActivity.utils.showAlert(MainActivity.this, "Мэдээллийг амжилттай илгээлээ");
+
+                                FragmentDrawer.userNameTextView.setText(SplachScreenActivity.userItem.getUserName());
+                                FragmentDrawer.userEmailTextView.setText(SplachScreenActivity.userItem.getUserEmail());
+                                Picasso.with(MainActivity.this).load(SplachScreenActivity.userItem.getUserImageURL()).into(FragmentDrawer.userImageView);
+
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

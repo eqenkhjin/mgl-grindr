@@ -1,9 +1,13 @@
 package mn.eq.health4men.Members;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
+import mn.eq.health4men.Chat.ChatActivity;
 import mn.eq.health4men.Objects.UserItem;
 import mn.eq.health4men.R;
 
@@ -18,6 +22,8 @@ public class UserDetailActivity extends FragmentActivity {
     private TextView userAge;
     private TextView userBodyType;
     private TextView userName;
+    private ImageButton newMessage;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,12 +34,15 @@ public class UserDetailActivity extends FragmentActivity {
         userWeight = (TextView) findViewById(R.id.userWeight);
         userName = (TextView) findViewById(R.id.userName);
         userBodyType = (TextView) findViewById(R.id.userBodyType);
+        newMessage = (ImageButton) findViewById(R.id.newMessage);
+
         initData();
 
     }
+
     private void initData(){
         Bundle bundle = getIntent().getExtras();
-        UserItem userItem;
+        final UserItem userItem;
         userItem = (UserItem) bundle.getSerializable("detail");
 
         userAboutMe.setText(userItem.getUserAboutme());
@@ -42,6 +51,19 @@ public class UserDetailActivity extends FragmentActivity {
         userWeight.setText(userItem.getUserWeight());
         userName.setText(userItem.getUserName());
         userBodyType.setText(userItem.getUserBodyType());
+
+        newMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(UserDetailActivity.this, ChatActivity.class);
+
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("chat_user", userItem);
+                intent.putExtras(bundle);
+
+                startActivity(intent);
+            }
+        });
     }
 
 }

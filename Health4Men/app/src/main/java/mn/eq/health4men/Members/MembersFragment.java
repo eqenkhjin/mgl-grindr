@@ -3,12 +3,15 @@ package mn.eq.health4men.Members;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -18,6 +21,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.logging.LogRecord;
 
 import mn.eq.health4men.Adapters.AdapterMembers;
 import mn.eq.health4men.Objects.UserItem;
@@ -43,6 +47,7 @@ public class MembersFragment extends Fragment {
     public MembersFragment membersFragment;
     public boolean isWaitResponse;
     public boolean canContinue = true;
+    private Handler handler;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,6 +59,8 @@ public class MembersFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_member,container,false);
+
+        handler = new Handler();
 
         createInterface();
 
@@ -78,13 +85,21 @@ public class MembersFragment extends Fragment {
 
                         UserItem userItem = arrayList.get(position);
 
-                        Intent intent = new Intent(getActivity(), UserDetailActivity.class);
+                        final Intent intent = new Intent(getActivity(), UserDetailActivity.class);
 
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("detail", userItem);
                         intent.putExtras(bundle);
 
-                        getActivity().startActivity(intent);
+                        handler.postDelayed(new Runnable() {
+                            public void run() {
+                                getActivity().startActivity(intent);
+                            }
+                        }, 500);
+
+                        Animation animFadeIn = AnimationUtils.loadAnimation(getContext(),
+                                R.anim.selector);
+                        view.startAnimation(animFadeIn);
 
                     }
                 })
@@ -101,6 +116,7 @@ public class MembersFragment extends Fragment {
             String url = Utils.MAIN_HOST + "user_list.php";
 
             RequestParams params = new RequestParams();
+            params.put("user_id",SplachScreenActivity.userItem.getUserID());
             params.put("page", pageIndex);
             params.put("per_page", perPage);
 

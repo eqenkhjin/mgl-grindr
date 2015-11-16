@@ -39,9 +39,9 @@ public class FragmentDrawer extends Fragment {
     private View containerView;
     private static String[] titles = null;
     private FragmentDrawerListener drawerListener;
-    private TextView userNameTextView;
-    private TextView userEmailTextView;
-    private ImageView userImageView;
+    public static TextView userNameTextView;
+    public static TextView userEmailTextView;
+    public static ImageView userImageView;
 
     public static View layout;
 
