@@ -2,8 +2,12 @@ package mn.eq.health4men.Root;
 
 import android.animation.ObjectAnimator;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -25,7 +29,6 @@ public class SplachScreenActivity extends RootActivity {
     public static String password;
     public static Utils utils;
     public static UserItem userItem;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +36,8 @@ public class SplachScreenActivity extends RootActivity {
         utils = new Utils(this);
 
         setContentView(R.layout.activity_splash_screen);
+
+
 
         {
             LinearLayout logoImageView = (LinearLayout) findViewById(R.id.logo);
@@ -53,6 +58,5 @@ public class SplachScreenActivity extends RootActivity {
         }, 3000);
 
     }
-
 
 }

@@ -55,8 +55,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/memberNameTextView"
                     android:textColor="#4d4d4d"
-                    android:textSize="14sp"
-                    android:text="Нэр байхгүй, нас байхгүй"/>
+                    android:textSize="14sp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -64,8 +63,7 @@
                     android:id="@+id/memberDistanceTextView"
                     android:textColor="#bbbbbb"
                     android:textSize="14sp"
-                    android:layout_marginTop="6dp"
-                    android:text="Тодорхойгүй"/>
+                    android:layout_marginTop="6dp"/>
 
             </LinearLayout>
 

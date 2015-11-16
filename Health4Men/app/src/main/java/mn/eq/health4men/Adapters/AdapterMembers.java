@@ -1,6 +1,7 @@
 package mn.eq.health4men.Adapters;
 
 import android.content.Context;
+import android.location.Location;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.squareup.picasso.Picasso;
 
@@ -94,6 +96,9 @@ public class AdapterMembers extends RecyclerView.Adapter<AdapterMembers.ViewHold
         if (memberItem.isMemberOnline())holder.view.setBackgroundResource(R.drawable.border_online);
         else holder.view.setBackgroundResource(R.drawable.border_offline);
 
+        holder.memberDistanceTextView.setText(memberItem.getDistanceBetweenMe());
+
+
         //setAnimation(holder.backLayout, position);
     }
 
@@ -111,5 +116,6 @@ public class AdapterMembers extends RecyclerView.Adapter<AdapterMembers.ViewHold
             lastPosition = position;
         }
     }
+
 
 }

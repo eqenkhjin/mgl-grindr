@@ -22,6 +22,7 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:23.1.0'
+    compile 'com.google.android.gms:play-services:+'
     compile 'com.android.support:design:23.0.1'
     compile 'com.android.support:recyclerview-v7:22.2.+'
     compile 'com.squareup.picasso:picasso:2.5.2'
@@ -31,5 +32,4 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:1.2.1'
     compile 'com.cocosw:bottomsheet:1.+@aar'
     compile files('libs/httpcore-4.4.jar')
-    compile 'com.google.android.gms:play-services:4.2.42'
 }

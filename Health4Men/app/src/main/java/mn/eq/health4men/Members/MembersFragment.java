@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
@@ -38,7 +39,7 @@ public class MembersFragment extends Fragment {
     private View view;
     private RecyclerView recyclerView;
     private LinearLayoutManager mLayoutManager;
-    private AdapterMembers adapterMembers;
+    public AdapterMembers adapterMembers;
     public int pageIndex = 1;
     private int perPage = 50;
     private static String TAG = "Members Fragment : ";
@@ -132,6 +133,8 @@ public class MembersFragment extends Fragment {
                     super.onSuccess(statusCode, headers, response);
                     if (progressDialog.isShowing()) progressDialog.dismiss();
                     System.out.println(TAG + "LOGIN SUCCESS" + response.toString());
+
+                    arrayList.clear();
 
                     for (int i = 0 ; i < response.length() ; i ++){
 

@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Location;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -19,8 +20,13 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cocosw.bottomsheet.BottomSheet;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.squareup.picasso.Picasso;
@@ -42,7 +48,8 @@ import mn.eq.health4men.UserEdit.PopUpFragment;
 import mn.eq.health4men.UserEdit.ProfileEditFragment;
 import mn.eq.health4men.Utils.Utils;
 
-public class MainActivity extends RootActivity implements FragmentDrawer.FragmentDrawerListener {
+public class MainActivity extends RootActivity implements FragmentDrawer.FragmentDrawerListener, GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener {
 
     private FragmentDrawer drawerFragment;
     private DrawerLayout drawerLayout;
@@ -57,6 +64,10 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
     private boolean popUpShowed;
     private static String TAG = "Profile Edit : ";
     private ProgressDialog progressDialog;
+    private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 1000;
+    private GoogleApiClient mGoogleApiClient;
+    public static Location mLastLocation;
+    private MembersFragment membersFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +110,11 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
         });
 
         displayView(0);
+
+        if (checkPlayServices()) {
+
+            buildGoogleApiClient();
+        }
     }
 
     @Override
@@ -125,8 +141,9 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
         if (position == 0) {
             title = "Members";
 
-            fragment = new MembersFragment();
+            membersFragment = new MembersFragment();
 
+            fragment = membersFragment;
         }
 
         if (position == 1) {
@@ -255,6 +272,59 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
                 })
                 .setIcon(R.drawable.alert_logo)
                 .show();
+
+    }
+
+    private boolean checkPlayServices() {
+        int resultCode = GooglePlayServicesUtil
+                .isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+                GooglePlayServicesUtil.getErrorDialog(resultCode, this,
+                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
+            } else {
+                Toast.makeText(getApplicationContext(),
+                        "Please update your Google Play Service. We're cant get your location.", Toast.LENGTH_LONG)
+                        .show();
+            }
+            return false;
+        }
+        return true;
+    }
+
+    protected synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API).build();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient.connect();
+        }
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        mLastLocation = LocationServices.FusedLocationApi
+                .getLastLocation(mGoogleApiClient);
+
+        if (membersFragment != null){
+            membersFragment.adapterMembers.notifyDataSetChanged();
+        }
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
 
     }
 }

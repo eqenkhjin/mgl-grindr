@@ -1,9 +1,14 @@
 package mn.eq.health4men.Objects;
 
+import android.location.Location;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+
+import mn.eq.health4men.Root.MainActivity;
+import mn.eq.health4men.Root.SplachScreenActivity;
 
 /**
  * Created by eQ on 11/14/15.
@@ -26,7 +31,9 @@ public class UserItem implements Serializable {
     private String userCoordinateX;
     private String userCooordinateY;
     private String userEmail;
+    private String distanceBetweenMe;
     private boolean memberOnline;
+
 
     private String noInformation = "no information";
 
@@ -75,6 +82,29 @@ public class UserItem implements Serializable {
         if (object.has("is_online")){
             if (object.getString("is_online").equalsIgnoreCase("1"))this.memberOnline = true;
             if (object.getString("is_online").equalsIgnoreCase("0"))this.memberOnline = false;
+        }
+
+        if (MainActivity.mLastLocation == null){
+            distanceBetweenMe = "Can't find your location.";
+        }else {
+            if (this.userCoordinateX.length() > 3 && this.userCooordinateY.length() > 3){
+                Location loc2 = new Location("");
+                loc2.setLatitude(Double.parseDouble(this.userCoordinateX));
+                loc2.setLongitude(Double.parseDouble(this.userCooordinateY));
+
+                float distanceInMeters = MainActivity.mLastLocation.distanceTo(loc2);
+
+                int distance = (int)distanceInMeters;
+
+                if (distance/1000 > 0){
+                    distanceBetweenMe = (distance / 1000 + " km " + distance % 1000 + " metr away");
+                }else {
+                    distanceBetweenMe = (distance%1000+" metr away");
+                }
+
+            }else {
+                distanceBetweenMe = "No information user location";
+            }
         }
     }
 
@@ -217,5 +247,13 @@ public class UserItem implements Serializable {
 
     public void setMemberOnline(boolean memberOnline) {
         this.memberOnline = memberOnline;
+    }
+
+    public String getDistanceBetweenMe() {
+        return distanceBetweenMe;
+    }
+
+    public void setDistanceBetweenMe(String distanceBetweenMe) {
+        this.distanceBetweenMe = distanceBetweenMe;
     }
 }

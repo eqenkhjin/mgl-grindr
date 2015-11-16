@@ -49,7 +49,7 @@ public class UserDetailActivity extends FragmentActivity {
         userItem = (UserItem) bundle.getSerializable("detail");
 
         userAboutMe.setText(userItem.getUserAboutme());
-        userAge.setText(userItem.getUserAge());
+        userAge.setText(userItem.getDistanceBetweenMe());
         userHeight.setText(userItem.getUserHeight());
         userWeight.setText(userItem.getUserWeight());
         userName.setText(userItem.getUserName());
