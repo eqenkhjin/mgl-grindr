@@ -240,31 +240,19 @@ public class NewUserDetailActivity extends FragmentActivity {
     }
 
     public void showLibrary(int position) {
-        if (fragmentTransac == null) fragmentTransac = fragmentManager.beginTransaction();
-        popUpShowed = true;
-        libraryFragment = new LibraryFragment();
+        FragmentTransaction fragmentTransac = fragmentManager.beginTransaction();
+        libraryFragment = LibraryFragment.newInstance();
         libraryFragment.userItem = userItem;
         libraryFragment.currentPosition = position;
-
         fragmentTransac.add(R.id.container, libraryFragment);
-
         fragmentTransac.commit();
-
+        popUpShowed = true;
     }
 
     @Override
     public void onBackPressed() {
-//        int count = getFragmentManager().getBackStackEntryCount();
-//        getFragmentManager().popBackStack();
-
-//        if(count==0){
-//            super.onBackPressed();
-//        } else {
-//            getFragmentManager().popBackStack();
-//
-//        }
         if (popUpShowed) {
-            fragmentTransac.remove(libraryFragment).commit();
+            getSupportFragmentManager().beginTransaction().remove(libraryFragment).commit();
             popUpShowed = false;
         } else {
             finish();

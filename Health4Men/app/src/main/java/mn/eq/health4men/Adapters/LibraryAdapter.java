@@ -3,6 +3,7 @@ package mn.eq.health4men.Adapters;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 
 import java.util.ArrayList;
 
@@ -12,7 +13,7 @@ import mn.eq.health4men.Objects.UserImageItem;
 /**
  * Created by eQ on 11/23/15.
  */
-public class LibraryAdapter extends FragmentPagerAdapter {
+public class LibraryAdapter extends FragmentStatePagerAdapter {
 
     ArrayList<UserImageItem> arrayList;
 
