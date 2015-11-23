@@ -84,8 +84,12 @@ public class AdapterImages extends RecyclerView.Adapter<AdapterImages.ViewHolder
 //        }
 
         UserImageItem imgItem = mDataset.get(position);
-        if (imgItem.getImgUrl().length() > 3) {
-            Picasso.with(context).load(imgItem.getImgUrl()).placeholder(R.drawable.placholder_member).into(holder.img);
+        if (imgItem.getImageURL().length() > 3) {
+
+            System.out.println("IMAGE URL : " + imgItem.getImageURL());
+
+            Picasso.with(context).load(imgItem.getImageURL()).placeholder(R.drawable.placholder_member)
+                    .into(holder.img);
         } else {
             holder.img.setImageResource(R.drawable.placholder_member);
         }

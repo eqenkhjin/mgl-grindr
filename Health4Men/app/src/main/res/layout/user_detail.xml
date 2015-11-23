@@ -90,7 +90,8 @@
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:paddingTop="5dp"
-                    android:textColor="#FFFFFF" />
+                    android:textColor="#FFFFFF"
+                    />
 
                 <android.support.design.widget.FloatingActionButton
                     android:id="@+id/msgButton"

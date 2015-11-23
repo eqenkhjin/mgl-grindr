@@ -18,8 +18,8 @@ public class UserImageItem implements Serializable {
     public UserImageItem(JSONObject object) throws JSONException {
 
 
-        if (object.getInt("type") == 0)this.canShow = false;
-        else this.canShow = true;
+        if (object.getInt("type") == 0)this.canShow = true;
+        else this.canShow = false;
 
         this.imageURL = object.getString("picture");
     }

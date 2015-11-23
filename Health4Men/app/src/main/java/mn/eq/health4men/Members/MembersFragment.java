@@ -49,7 +49,6 @@ public class MembersFragment extends Fragment {
     private static String TAG = "Members Fragment : ";
     private ProgressDialog progressDialog;
     public static ArrayList<UserItem> arrayList = new ArrayList<>();
-    public static ArrayList<UserImageItem> imgsList = new ArrayList<>();
     public MembersFragment membersFragment;
     public boolean isWaitResponse;
     public boolean canContinue = true;
@@ -163,7 +162,6 @@ public class MembersFragment extends Fragment {
                     super.onSuccess(statusCode, headers, response);
                     if (progressDialog.isShowing()) progressDialog.dismiss();
                     System.out.println(TAG + "LOGIN SUCCESS" + response.toString());
-                    imgsList.clear();
                     arrayList.clear();
 
                     for (int i = 0 ; i < response.length() ; i ++){
@@ -171,8 +169,6 @@ public class MembersFragment extends Fragment {
                         try {
                             UserItem b =new UserItem(response.getJSONObject(i));
                             arrayList.add(b);
-                            UserImageItem k = new UserImageItem(b.getUserImageURL());
-                            imgsList.add(k);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

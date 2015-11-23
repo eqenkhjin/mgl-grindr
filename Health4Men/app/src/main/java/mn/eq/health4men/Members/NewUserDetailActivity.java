@@ -57,7 +57,6 @@ public class NewUserDetailActivity extends FragmentActivity {
     private LinearLayoutManager mLayoutManager;
     private LinearLayout scaledLinear;
     public AdapterImages adapterImages;
-    public static ArrayList<UserImageItem> arrayList = new ArrayList<>();
     private UserItem userItem;
     private int deviceHeight;
     private int deviceWidth;
@@ -66,21 +65,11 @@ public class NewUserDetailActivity extends FragmentActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_detail);
-//        arrayList = MembersFragment.imgsList;
         getDeviceWidth();
-        for(int i=0 ; i<10 ; i++){
-           UserImageItem b = new UserImageItem("s");
-            arrayList.add(b);
-        }
 
-//        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(msgButton.getLayoutParams());
+        Bundle bundle = getIntent().getExtras();
+        userItem = (UserItem) bundle.getSerializable("detail");
 
-
-//        lp.setMargins(0, -height/2, 0, 0);
-//        lp.addRule(RelativeLayout.BELOW, R.id.userImage);
-//        lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-
-//        msgButton.setLayoutParams(lp);
         createInterface();
 
         initData();
@@ -88,7 +77,8 @@ public class NewUserDetailActivity extends FragmentActivity {
         configHeader();
 
     }
-    private void getDeviceWidth(){
+
+    private void getDeviceWidth() {
         WindowManager w = getWindowManager();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
@@ -103,20 +93,17 @@ public class NewUserDetailActivity extends FragmentActivity {
 
         }
     }
-    private void initData(){
-        Bundle bundle = getIntent().getExtras();
 
-//        userItem = (UserItem) bundle.getSerializable("detail");
-        userImage.setImageResource(R.drawable.placholder_member);
-//        userInfo.setText("29 yrs,190cm,80kg");
-        if(userItem!=null) {
+    private void initData() {
+
+        if (userItem != null) {
             if (userItem.getUserImageURL().length() > 3) {
                 Picasso.with(getBaseContext()).load(userItem.getUserImageURL()).into(userImage);
             } else
                 userImage.setImageResource(R.drawable.placholder_member);
             userName.setText(userItem.getUserName());
             userAboutMe.setText(userItem.getUserAboutme());
-            photoQuantity.setText("Photos (" + MembersFragment.imgsList.size() + ")");
+            photoQuantity.setText("Photos (" + userItem.getAlbum().size() + ")");
             if (userItem.isMemberOnline())
                 onlineView.setBackgroundResource(R.drawable.border_online);
             else onlineView.setBackgroundResource(R.drawable.border_offline);
@@ -143,27 +130,29 @@ public class NewUserDetailActivity extends FragmentActivity {
 //        TextView headerTitleTextView = (TextView) findViewById(R.id.toolbarTitle);
 //        headerTitleTextView.setText("Profile");
     }
-    private void createInterfaceByCode(){
 
-        userAboutMe.setPadding(10,5,deviceWidth/5+30,5);
+    private void createInterfaceByCode() {
 
-        userImage.getLayoutParams().height = deviceHeight/5*3;
+        userAboutMe.setPadding(10, 5, deviceWidth / 5 + 30, 5);
 
-        scaledLinear.getLayoutParams().height = deviceWidth/4;
+        userImage.getLayoutParams().height = deviceHeight / 5 * 3;
+
+        scaledLinear.getLayoutParams().height = deviceWidth / 4;
 
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(msgButton.getLayoutParams());
-        msgButton.getLayoutParams().width = deviceWidth/5;
-        msgButton.getLayoutParams().height = deviceWidth/5;
-        lp.setMargins(0, -deviceWidth/8 , 30, 0);
+        msgButton.getLayoutParams().width = deviceWidth / 5;
+        msgButton.getLayoutParams().height = deviceWidth / 5;
+        lp.setMargins(0, -deviceWidth / 8, 30, 0);
         lp.addRule(RelativeLayout.BELOW, R.id.userImage);
         lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         msgButton.setLayoutParams(lp);
 
-        recyclerView.getLayoutParams().height = deviceWidth/4;
+        recyclerView.getLayoutParams().height = deviceWidth / 4;
 
 
     }
-    private void createInterface(){
+
+    private void createInterface() {
 
         userAboutMe = (TextView) findViewById(R.id.userAboutme);
 //        userAge = (TextView) findViewById(R.id.userAge);
@@ -179,8 +168,9 @@ public class NewUserDetailActivity extends FragmentActivity {
         scaledLinear = (LinearLayout) findViewById(R.id.scaleLinear);
         photoQuantity = (TextView) findViewById(R.id.photoQuantity);
         recyclerView = (RecyclerView) findViewById(R.id.imgList);
-        msgButton = (FloatingActionButton)findViewById(R.id.msgButton);
+        msgButton = (FloatingActionButton) findViewById(R.id.msgButton);
         recyclerView.setHasFixedSize(true);
+
 
         createInterfaceByCode();
 //        recyclerView.getLayoutParams().height = MainActivity.deviceWidth/4;
@@ -188,7 +178,7 @@ public class NewUserDetailActivity extends FragmentActivity {
 //           recyclerView.setLayoutManager(new StaggeredGridLayoutManager(4,StaggeredGridLayoutManager.VERTICAL));
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL));
 
-        adapterImages = new AdapterImages(this, arrayList);
+        adapterImages = new AdapterImages(this, userItem.getAlbum());
 //        adapterImages = membersFragment;
         recyclerView.setAdapter(adapterImages);
         recyclerView.addOnItemTouchListener(
@@ -196,7 +186,7 @@ public class NewUserDetailActivity extends FragmentActivity {
                     @Override
                     public void onItemClick(View view, int position) {
 
-                        UserImageItem userItem = MembersFragment.imgsList.get(position);
+                        UserImageItem userImage = userItem.getAlbum().get(position);
 
 //                        final Intent intent = new Intent(getActivity(), NewUserDetailActivity.class);
 //
