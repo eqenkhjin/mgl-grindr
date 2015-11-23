@@ -30,15 +30,36 @@
 
     </LinearLayout>
 
-    <ImageButton
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/whiteStar"
-        android:layout_gravity="center_vertical|right"
-        android:background="?attr/selectableItemBackground"
-        android:src="@android:drawable/ic_dialog_dialer"
-        android:padding="12dp"
-        android:layout_marginRight="6dp"/>
+        android:orientation="horizontal"
+        android:layout_gravity="right|center_vertical">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/search"
+            android:layout_gravity="center_vertical|right"
+            android:background="?attr/selectableItemBackground"
+            android:src="@drawable/search"
+            android:padding="12dp"
+            android:layout_marginRight="6dp"/>
+
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/whiteStar"
+            android:layout_gravity="center_vertical|right"
+            android:background="?attr/selectableItemBackground"
+            android:src="@drawable/checkbox_selector"
+            android:padding="12dp"
+            android:layout_marginRight="6dp"/>
+
+    </LinearLayout>
+
+
 
     <LinearLayout
         android:layout_width="wrap_content"
