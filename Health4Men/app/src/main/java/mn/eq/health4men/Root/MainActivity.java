@@ -43,6 +43,7 @@ import org.json.JSONObject;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import mn.eq.health4men.Album.MyAlbum;
 import mn.eq.health4men.LeftMenu.FragmentDrawer;
 import mn.eq.health4men.Login.LoginActivity;
 import mn.eq.health4men.Map.FragmentMap;
@@ -180,9 +181,9 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
         }
 
         if (position == 1) {
-            title = "Map";
+            title = "My album";
 
-            fragment = new FragmentMap();
+            fragment = new MyAlbum();
 
         }
 
