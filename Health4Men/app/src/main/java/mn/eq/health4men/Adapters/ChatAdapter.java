@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -13,7 +14,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import mn.eq.health4men.Chat.ChatActivity;
+//import mn.eq.health4men.Chat.ChatActivity;
 import mn.eq.health4men.Objects.ChatItem;
 import mn.eq.health4men.R;
 
@@ -25,7 +26,7 @@ public class ChatAdapter extends BaseAdapter {
     public Context context;
     public ArrayList<ChatItem> zurvasArray;
     public int userType;
-    public ChatActivity chatActivity;
+//    public ChatActivity chatActivity;
     public boolean isLaunched = false;
 
     public ChatAdapter(Context context, ArrayList<ChatItem> zurvasArray){
@@ -54,7 +55,7 @@ public class ChatAdapter extends BaseAdapter {
     public View getView(int i, View convertView, ViewGroup viewGroup) {
 
         ZurvasHolder zurvasHolder = new ZurvasHolder();
-        ChatItem zurvasItem = zurvasArray.get(i);
+        final ChatItem zurvasItem = zurvasArray.get(i);
             View vi=convertView;
 
         if(convertView==null)
@@ -72,6 +73,7 @@ public class ChatAdapter extends BaseAdapter {
                 zurvasHolder.body = (TextView) vi.findViewById(R.id.bodyUser);
                 zurvasHolder.date = (TextView) vi.findViewById(R.id.dateUser);
                 zurvasHolder.isRead = (TextView) vi.findViewById(R.id.isReadUser);
+                zurvasHolder.imageView = (ImageView) vi.findViewById(R.id.chat_imageView);
 
             }else {
                 LinearLayout teacher = (LinearLayout)vi.findViewById(R.id.cellUser);
@@ -85,6 +87,7 @@ public class ChatAdapter extends BaseAdapter {
                 zurvasHolder.body = (TextView) vi.findViewById(R.id.bodyTeacher);
                 zurvasHolder.date = (TextView) vi.findViewById(R.id.dateTeacher);
                 zurvasHolder.isRead = (TextView) vi.findViewById(R.id.isReadTeacher);
+                zurvasHolder.imageView = (ImageView) vi.findViewById(R.id.chat_imageView1);
 
             }
         if (zurvasItem.userImageURL.length() > 0){
@@ -94,6 +97,23 @@ public class ChatAdapter extends BaseAdapter {
                     .into(zurvasHolder.icon);
         }else {
             zurvasHolder.icon.setImageResource(R.drawable.img_user_default);
+        }
+
+        if (zurvasItem.hasImage){
+
+            zurvasHolder.imageView.setVisibility(View.VISIBLE);
+
+            Picasso.with(context).load(zurvasItem.imageURL).into(zurvasHolder.imageView);
+
+            zurvasHolder.imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+//                    chatActivity.showBigImage(zurvasItem.imageURL);
+                }
+            });
+
+        }else {
+            zurvasHolder.imageView.setVisibility(View.GONE);
         }
 
 
@@ -108,16 +128,6 @@ public class ChatAdapter extends BaseAdapter {
             zurvasHolder.isRead.setText("");
         }
 
-        if (i == 0){
-            if (!isLaunched){
-                chatActivity.getBeforeZurvas();
-                isLaunched = true;
-            }
-        }
-        if (i == (zurvasArray.size() - 1)){
-            chatActivity.setRead();
-        }
-
         return vi;
     }
 
@@ -127,6 +137,7 @@ public class ChatAdapter extends BaseAdapter {
         TextView body;
         TextView date;
         TextView isRead;
+        ImageView imageView;
     }
 
     public String getDateStr(String str){

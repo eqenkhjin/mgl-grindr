@@ -21,6 +21,8 @@ public class ChatItem implements Serializable {
     public int userID;
     public String userImageURL;
     public boolean isMyMessage;
+    public String imageURL;
+    public boolean hasImage = false;
 
     public ChatItem(JSONObject object) throws JSONException {
 
@@ -29,5 +31,11 @@ public class ChatItem implements Serializable {
         body = object.getString("text");
         userImageURL = object.getString("profile_url");
         userID = object.getInt("from_user");
+
+        if (object.has("picture")){
+            imageURL = object.getString("picture");
+            hasImage = true;
+        }
+
     }
 }

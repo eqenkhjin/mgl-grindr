@@ -39,14 +39,16 @@
         </activity>
 
         <activity android:name=".Login.LoginActivity" android:screenOrientation="portrait"/>
+
         <activity android:name=".Login.RegisterActivity" android:screenOrientation="portrait"/>
         <activity android:name=".Root.MainActivity" android:screenOrientation="portrait"/>
         <activity android:name=".Members.UserDetailActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".Members.NewUserDetailActivity" android:screenOrientation="portrait"/>
         <activity android:name=".Chat.ChatActivity" android:screenOrientation="portrait"/>
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyAftUgNlfOsdORSMXxD4KeISzZhyWZxvO8"/>
+            android:value="AIzaSyD3r3AT345iti87DcWgi-x269-icqlESv8"/>
 
     </application>
 

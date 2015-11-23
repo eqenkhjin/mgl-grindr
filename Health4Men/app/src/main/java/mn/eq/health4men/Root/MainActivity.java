@@ -4,7 +4,10 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Point;
 import android.location.Location;
+import android.os.Build;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -12,10 +15,12 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -58,29 +63,52 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
     private TextView toolbarTitle;
     private FrameLayout toolbar;
     private ImageButton menuIcon;
-    private ImageButton whiteStar;
     private LinearLayout done;
-    public MainActivity mainActivity;
     private boolean popUpShowed;
     private static String TAG = "Profile Edit : ";
     private ProgressDialog progressDialog;
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 1000;
     private GoogleApiClient mGoogleApiClient;
-    public static Location mLastLocation;
     private MembersFragment membersFragment;
+
+    public MainActivity mainActivity;
+    public static Location mLastLocation;
+    public static ImageButton whiteStar;
+    public static int deviceWidth;
+    public static int deviceHeight;
+    public static FloatingActionButton msgButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
         mainActivity = this;
+        getDeviceWidth();
         createInterface();
     }
+    private void getDeviceWidth(){
+        WindowManager w = getWindowManager();
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            Point size = new Point();
+            w.getDefaultDisplay().getSize(size);
+            deviceHeight = size.y;
+            deviceWidth = size.x;
+        } else {
+            Display d = w.getDefaultDisplay();
+            deviceWidth = d.getWidth();
+            deviceHeight = d.getHeight();
+
+        }
+    }
     private void createInterface(){
         progressDialog = new Utils().getProgressDialog(this, "Нэвтэрч байна");
 
         toolbar = (FrameLayout) findViewById(R.id.toolbar);
+
+        msgButton = (FloatingActionButton) findViewById(R.id.msgButton);
 
         done = (LinearLayout) findViewById(R.id.done);
 
@@ -92,7 +120,12 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
         });
 
         whiteStar = (ImageButton) findViewById(R.id.whiteStar);
+        whiteStar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+            }
+        });
         drawerFragment = (FragmentDrawer)
                 getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -203,7 +236,7 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
             params.put("height", SplachScreenActivity.userItem.getUserHeight());
             params.put("weight", SplachScreenActivity.userItem.getUserWeight());
             params.put("country", SplachScreenActivity.userItem.getUserCountry());
-            params.put("body_type", SplachScreenActivity.userItem.getUserBodyType());
+//            params.put("body_type", SplachScreenActivity.userItem.getUserBodyType());
             params.put("looking_for", SplachScreenActivity.userItem.getUserLookingFor());
             params.put("relationship_status", SplachScreenActivity.userItem.getUserRelationshipStatus());
             params.put("about_me", SplachScreenActivity.userItem.getUserAboutme());

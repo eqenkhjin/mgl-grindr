@@ -165,10 +165,10 @@ public class ProfileEditFragment extends Fragment {
             ethnicityTextView.setText(text);
             SplachScreenActivity.userItem.setUserCountry(text);
         }
-        if (type == 5) {
-            bodyTypeTextView.setText(text);
-            SplachScreenActivity.userItem.setUserBodyType(text);
-        }
+//        if (type == 5) {
+//            bodyTypeTextView.setText(text);
+//            SplachScreenActivity.userItem.setUserBodyType(text);
+//        }
         if (type == 6) {
             lookingForTextView.setText(text);
             SplachScreenActivity.userItem.setUserLookingFor(text);
@@ -187,7 +187,7 @@ public class ProfileEditFragment extends Fragment {
         heightTextView.setText(SplachScreenActivity.userItem.getUserHeight());
         weightTextView.setText(SplachScreenActivity.userItem.getUserWeight());
         ethnicityTextView.setText(SplachScreenActivity.userItem.getUserCountry());
-        bodyTypeTextView.setText(SplachScreenActivity.userItem.getUserBodyType());
+//        bodyTypeTextView.setText(SplachScreenActivity.userItem.getUserBodyType());
         lookingForTextView.setText(SplachScreenActivity.userItem.getUserLookingFor());
         relationTextView.setText(SplachScreenActivity.userItem.getUserRelationshipStatus());
     }

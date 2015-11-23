@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import mn.eq.health4men.Members.MembersFragment;
 import mn.eq.health4men.Objects.UserItem;
 import mn.eq.health4men.R;
+import mn.eq.health4men.Root.MainActivity;
 
 
 /**
@@ -27,6 +29,7 @@ import mn.eq.health4men.R;
  */
 public class AdapterMembers extends RecyclerView.Adapter<AdapterMembers.ViewHolder> {
 
+    private boolean isList = true;
     private ArrayList<UserItem> mDataset;
     private Context context;
     private int lastPosition = -1;
@@ -38,15 +41,26 @@ public class AdapterMembers extends RecyclerView.Adapter<AdapterMembers.ViewHold
         public TextView memberNameTextView;
         public TextView memberDistanceTextView;
         public LinearLayout backLayout;
+        public ImageView memberImage;
         public View view;
 
         public ViewHolder(View v) {
             super(v);
-            memberImageView = (RoundedImageView) v.findViewById(R.id.memberImageView);
-            memberNameTextView = (TextView) v.findViewById(R.id.memberNameTextView);
-            memberDistanceTextView = (TextView) v.findViewById(R.id.memberDistanceTextView);
-            backLayout = (LinearLayout) v.findViewById(R.id.backLayout);
-            view = v.findViewById(R.id.onlineView);
+            if(isList){
+                memberImageView = (RoundedImageView) v.findViewById(R.id.memberImageView);
+                memberNameTextView = (TextView) v.findViewById(R.id.memberNameTextView);
+                memberDistanceTextView = (TextView) v.findViewById(R.id.memberDistanceTextView);
+                backLayout = (LinearLayout) v.findViewById(R.id.backLayout);
+                view = v.findViewById(R.id.onlineView);
+            } else {
+                LinearLayout layout = (LinearLayout) v.findViewById(R.id.row_columned_linear);
+                layout.getLayoutParams().width = MainActivity.deviceWidth/3;
+                layout.getLayoutParams().height = MainActivity.deviceWidth/3;
+                memberImage = (ImageView) v.findViewById(R.id.row_columned_image);
+                memberNameTextView = (TextView) v.findViewById(R.id.row_columned_text);
+                view = v.findViewById(R.id.onlineView);
+            }
+
         }
     }
 
@@ -60,7 +74,8 @@ public class AdapterMembers extends RecyclerView.Adapter<AdapterMembers.ViewHold
         notifyItemRemoved(position);
     }
 
-    public AdapterMembers(Context context, ArrayList<UserItem> myDataset) {
+    public AdapterMembers(Context context, ArrayList<UserItem> myDataset,boolean isList) {
+        this.isList = isList;
         this.context = context;
         mDataset = myDataset;
     }
@@ -68,7 +83,13 @@ public class AdapterMembers extends RecyclerView.Adapter<AdapterMembers.ViewHold
     @Override
     public AdapterMembers.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                    int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_good, parent, false);
+        View v;
+        if(isList){
+            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_good, parent, false);
+
+        } else {
+            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_columned, parent, false);
+        }
         ViewHolder vh = new ViewHolder(v);
         return vh;
     }
@@ -84,20 +105,31 @@ public class AdapterMembers extends RecyclerView.Adapter<AdapterMembers.ViewHold
         }
 
         UserItem memberItem = mDataset.get(position);
+        if(isList) {
+            if (memberItem.getUserImageURL().length() > 3) {
+                Picasso.with(context).load(memberItem.getUserImageURL()).placeholder(R.drawable.placholder_member).into(holder.memberImageView);
+            } else {
+                holder.memberImageView.setImageResource(R.drawable.placholder_member);
+            }
 
-        if (memberItem.getUserImageURL().length() > 3){
-            Picasso.with(context).load(memberItem.getUserImageURL()).placeholder(R.drawable.placholder_member).into(holder.memberImageView);
-        }else {
-            holder.memberImageView.setImageResource(R.drawable.placholder_member);
+            holder.memberNameTextView.setText(memberItem.getUserName() + ", " + memberItem.getUserAge());
+
+            if (memberItem.isMemberOnline())
+                holder.view.setBackgroundResource(R.drawable.border_online);
+            else holder.view.setBackgroundResource(R.drawable.border_offline);
+
+            holder.memberDistanceTextView.setText(memberItem.getDistanceBetweenMe());
+        } else {
+            if (memberItem.getUserImageURL().length() > 3) {
+                Picasso.with(context).load(memberItem.getUserImageURL()).into(holder.memberImage);
+            } else {
+                holder.memberImage.setImageResource(R.drawable.placholder_member);
+            }
+            if (memberItem.isMemberOnline())
+                holder.view.setBackgroundResource(R.drawable.border_online);
+            else holder.view.setBackgroundResource(R.drawable.border_offline);
+            holder.memberNameTextView.setText(memberItem.getDistanceBetweenMe());
         }
-
-        holder.memberNameTextView.setText(memberItem.getUserName() + ", " + memberItem.getUserAge());
-
-        if (memberItem.isMemberOnline())holder.view.setBackgroundResource(R.drawable.border_online);
-        else holder.view.setBackgroundResource(R.drawable.border_offline);
-
-        holder.memberDistanceTextView.setText(memberItem.getDistanceBetweenMe());
-
 
         //setAnimation(holder.backLayout, position);
     }

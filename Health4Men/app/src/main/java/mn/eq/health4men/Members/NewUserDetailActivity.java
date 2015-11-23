@@ -1,0 +1,236 @@
+package mn.eq.health4men.Members;
+
+import android.content.Intent;
+import android.graphics.Point;
+import android.os.Build;
+import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.view.Display;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+
+import mn.eq.health4men.Adapters.AdapterImages;
+import mn.eq.health4men.Adapters.AdapterMembers;
+import mn.eq.health4men.Chat.ChatActivity;
+import mn.eq.health4men.Objects.UserImageItem;
+import mn.eq.health4men.Objects.UserItem;
+import mn.eq.health4men.R;
+import mn.eq.health4men.Root.MainActivity;
+import mn.eq.health4men.Utils.RecyclerItemClickListener;
+
+/**
+ * Created by Tamir on 11/21/2015.
+ */
+public class NewUserDetailActivity extends FragmentActivity {
+
+    private TextView userAboutMe;
+    private TextView userHeight;
+    private TextView userWeight;
+    private TextView userAge;
+    private TextView userBodyType;
+    private TextView userName;
+    private TextView userInfo;
+    private TextView userDistance;
+    private TextView photoQuantity;
+    private ImageButton newMessage;
+    private ImageView userImage;
+    private FloatingActionButton msgButton;
+    private View onlineView;
+    private RecyclerView recyclerView;
+    private LinearLayoutManager mLayoutManager;
+    private LinearLayout scaledLinear;
+    public AdapterImages adapterImages;
+    public static ArrayList<UserImageItem> arrayList = new ArrayList<>();
+    private UserItem userItem;
+    private int deviceHeight;
+    private int deviceWidth;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.user_detail);
+//        arrayList = MembersFragment.imgsList;
+        getDeviceWidth();
+        for(int i=0 ; i<10 ; i++){
+           UserImageItem b = new UserImageItem("s");
+            arrayList.add(b);
+        }
+
+//        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(msgButton.getLayoutParams());
+
+
+//        lp.setMargins(0, -height/2, 0, 0);
+//        lp.addRule(RelativeLayout.BELOW, R.id.userImage);
+//        lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+
+//        msgButton.setLayoutParams(lp);
+        createInterface();
+
+        initData();
+
+        configHeader();
+
+    }
+    private void getDeviceWidth(){
+        WindowManager w = getWindowManager();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            Point size = new Point();
+            w.getDefaultDisplay().getSize(size);
+            deviceHeight = size.y;
+            deviceWidth = size.x;
+        } else {
+            Display d = w.getDefaultDisplay();
+            deviceWidth = d.getWidth();
+            deviceHeight = d.getHeight();
+
+        }
+    }
+    private void initData(){
+        Bundle bundle = getIntent().getExtras();
+
+//        userItem = (UserItem) bundle.getSerializable("detail");
+        userImage.setImageResource(R.drawable.placholder_member);
+//        userInfo.setText("29 yrs,190cm,80kg");
+        if(userItem!=null) {
+            if (userItem.getUserImageURL().length() > 3) {
+                Picasso.with(getBaseContext()).load(userItem.getUserImageURL()).into(userImage);
+            } else
+                userImage.setImageResource(R.drawable.placholder_member);
+            userName.setText(userItem.getUserName());
+            userAboutMe.setText(userItem.getUserAboutme());
+            photoQuantity.setText("Photos (" + MembersFragment.imgsList.size() + ")");
+            if (userItem.isMemberOnline())
+                onlineView.setBackgroundResource(R.drawable.border_online);
+            else onlineView.setBackgroundResource(R.drawable.border_offline);
+        }
+//        userAge.setText(", "+userItem.getUserAge());
+//        userDistance.setText(userItem.getDistanceBetweenMe());
+//        userHeight.setText(userItem.getUserHeight());
+//        System.out.println("HEIGHT : "+userItem.getUserHeight());
+//        userWeight.setText(userItem.getUserWeight());
+//        userName.setText(userItem.getUserName());
+//        userBodyType.setText(userItem.getUserBodyType());
+
+    }
+
+    private void configHeader() {
+        ImageView backImageView = (ImageView) findViewById(R.id.menuIcon);
+        backImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
+//        TextView headerTitleTextView = (TextView) findViewById(R.id.toolbarTitle);
+//        headerTitleTextView.setText("Profile");
+    }
+    private void createInterfaceByCode(){
+
+        userAboutMe.setPadding(10,5,deviceWidth/5+30,5);
+
+        userImage.getLayoutParams().height = deviceHeight/5*3;
+
+        scaledLinear.getLayoutParams().height = deviceWidth/4;
+
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(msgButton.getLayoutParams());
+        msgButton.getLayoutParams().width = deviceWidth/5;
+        msgButton.getLayoutParams().height = deviceWidth/5;
+        lp.setMargins(0, -deviceWidth/8 , 30, 0);
+        lp.addRule(RelativeLayout.BELOW, R.id.userImage);
+        lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        msgButton.setLayoutParams(lp);
+
+        recyclerView.getLayoutParams().height = deviceWidth/4;
+
+
+    }
+    private void createInterface(){
+
+        userAboutMe = (TextView) findViewById(R.id.userAboutme);
+//        userAge = (TextView) findViewById(R.id.userAge);
+//        userHeight = (TextView) findViewById(R.id.userHeight);
+//        userWeight = (TextView) findViewById(R.id.userWeight);
+        userName = (TextView) findViewById(R.id.userName);
+//        userDistance = (TextView) findViewById(R.id.userDistance);
+//        userBodyType = (TextView) findViewById(R.id.userBodyType);
+//        newMessage = (ImageButton) findViewById(R.id.newMessage);
+        userImage = (ImageView) findViewById(R.id.userImage);
+//        userInfo = (TextView) findViewById(R.id.userInfo);
+        onlineView = findViewById(R.id.onlineView);
+        scaledLinear = (LinearLayout) findViewById(R.id.scaleLinear);
+        photoQuantity = (TextView) findViewById(R.id.photoQuantity);
+        recyclerView = (RecyclerView) findViewById(R.id.imgList);
+        msgButton = (FloatingActionButton)findViewById(R.id.msgButton);
+        recyclerView.setHasFixedSize(true);
+
+        createInterfaceByCode();
+//        recyclerView.getLayoutParams().height = MainActivity.deviceWidth/4;
+//        recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+//           recyclerView.setLayoutManager(new StaggeredGridLayoutManager(4,StaggeredGridLayoutManager.VERTICAL));
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL));
+
+        adapterImages = new AdapterImages(this, arrayList);
+//        adapterImages = membersFragment;
+        recyclerView.setAdapter(adapterImages);
+        recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(this, new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+
+                        UserImageItem userItem = MembersFragment.imgsList.get(position);
+
+//                        final Intent intent = new Intent(getActivity(), NewUserDetailActivity.class);
+//
+//                        Bundle bundle = new Bundle();
+//                        bundle.putSerializable("detail", userItem);
+//                        intent.putExtras(bundle);
+//
+//                        handler.postDelayed(new Runnable() {
+//                            public void run() {
+//                                getActivity().startActivity(intent);
+//                            }
+//                        }, 300);
+//
+//                        Animation animFadeIn = AnimationUtils.loadAnimation(getContext(),
+//                                R.anim.selector);
+//                        view.startAnimation(animFadeIn);
+
+                    }
+                })
+        );
+
+
+        msgButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(NewUserDetailActivity.this, ChatActivity.class);
+
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("chat_user", userItem);
+                intent.putExtras(bundle);
+
+                startActivity(intent);
+            }
+        });
+
+    }
+}

@@ -2,10 +2,12 @@ package mn.eq.health4men.Objects;
 
 import android.location.Location;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import mn.eq.health4men.Root.MainActivity;
 import mn.eq.health4men.Root.SplachScreenActivity;
@@ -26,14 +28,16 @@ public class UserItem implements Serializable {
     private String userCountry;
     private String userRelationshipStatus;
     private String userAboutme;
-    private String userBodyType;
+    private String userLocation;
+//    private String userBodyType;
     private String userLookingFor;
     private String userCoordinateX;
     private String userCooordinateY;
     private String userEmail;
     private String distanceBetweenMe;
+    private String userRole;
     private boolean memberOnline;
-
+    private ArrayList<UserImageItem> album = new ArrayList<>();
 
     private String noInformation = "no information";
 
@@ -70,9 +74,6 @@ public class UserItem implements Serializable {
         if (checkIsEmpty(object.getString("about_me")))this.userAboutme = noInformation;
         else this.userAboutme = object.getString("about_me");
 
-        if (checkIsEmpty(object.getString("body_type")))this.userBodyType = noInformation;
-        else this.userBodyType = object.getString("body_type");
-
         if (checkIsEmpty(object.getString("looking_for")))this.userLookingFor = noInformation;
         else this.userLookingFor = object.getString("looking_for");
 
@@ -106,6 +107,19 @@ public class UserItem implements Serializable {
                 distanceBetweenMe = "No information user location";
             }
         }
+
+        if (object.has("album")){
+            JSONArray array = object.getJSONArray("album");
+
+            if (array.length() > 0){
+
+                for (int i = 0 ; i < array.length() ; i ++){
+                    this.album.add(new UserImageItem(array.getJSONObject(i)));
+                }
+
+            }
+
+        }
     }
 
     private boolean checkIsEmpty(String str){
@@ -135,6 +149,7 @@ public class UserItem implements Serializable {
 
     public void setUserRegisterDate(String userRegisterDate) {
         this.userRegisterDate = userRegisterDate;
+
     }
 
     public String getUserDisplayName() {
@@ -201,13 +216,13 @@ public class UserItem implements Serializable {
         this.userAboutme = userAboutme;
     }
 
-    public String getUserBodyType() {
-        return userBodyType;
-    }
-
-    public void setUserBodyType(String userBodyType) {
-        this.userBodyType = userBodyType;
-    }
+//    public String getUserBodyType() {
+//        return userBodyType;
+//    }
+//
+//    public void setUserBodyType(String userBodyType) {
+//        this.userBodyType = userBodyType;
+//    }
 
     public String getUserLookingFor() {
         return userLookingFor;
@@ -255,5 +270,37 @@ public class UserItem implements Serializable {
 
     public void setDistanceBetweenMe(String distanceBetweenMe) {
         this.distanceBetweenMe = distanceBetweenMe;
+    }
+
+    public String getUserLocation() {
+        return userLocation;
+    }
+
+    public void setUserLocation(String userLocation) {
+        this.userLocation = userLocation;
+    }
+
+    public String getUserRole() {
+        return userRole;
+    }
+
+    public void setUserRole(String userRole) {
+        this.userRole = userRole;
+    }
+
+    public ArrayList<UserImageItem> getAlbum() {
+        return album;
+    }
+
+    public void setAlbum(ArrayList<UserImageItem> album) {
+        this.album = album;
+    }
+
+    public String getNoInformation() {
+        return noInformation;
+    }
+
+    public void setNoInformation(String noInformation) {
+        this.noInformation = noInformation;
     }
 }

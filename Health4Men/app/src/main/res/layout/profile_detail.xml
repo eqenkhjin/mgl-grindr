@@ -17,6 +17,7 @@
             android:layout_height="300dp">
 
             <ImageView
+                android:scaleType="centerCrop"
                 android:id="@+id/userImage"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -51,6 +52,7 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/userAge"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:maxLines="1"
@@ -59,7 +61,7 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/userAge"
+                    android:id="@+id/userDistance"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
@@ -80,148 +82,153 @@
                 android:src="@drawable/message_white" />
 
         </RelativeLayout>
-
-        <LinearLayout
+        <ScrollView
+            android:scrollbars="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/backgroundLight"
-            android:orientation="vertical"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp">
-
-            <TextView
-                android:id="@+id/userAboutme"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:maxLines="3"
-                android:paddingBottom="15dp"
-                android:paddingTop="15dp"
-                android:text="This field is created to write about your status or something"
-                android:textColor="#bbbbbb"
-                android:textSize="14dp" />
-
-            <View
-
-                android:layout_width="match_parent"
-                android:layout_height="1dip"
-                android:background="#bbbbbb" />
-
+            android:layout_height="wrap_content">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingBottom="15dp"
-                android:paddingTop="15dp"
-                android:weightSum="2">
+                android:background="@color/backgroundLight"
+                android:orientation="vertical"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
 
                 <TextView
-                    android:layout_width="0dp"
+                    android:id="@+id/userAboutme"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Height"
-                    android:textColor="#bbbbbb" />
+                    android:maxLines="3"
+                    android:paddingBottom="15dp"
+                    android:paddingTop="15dp"
+                    android:text="This field is created to write about your status or something"
+                    android:textColor="#bbbbbb"
+                    android:textSize="14dp" />
 
-                <TextView
-                    android:id="@+id/userHeight"
-                    android:layout_width="0dp"
+                <View
+
+                    android:layout_width="match_parent"
+                    android:layout_height="1dip"
+                    android:background="#bbbbbb" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="right"
-                    android:text="180cm"
-                    android:textColor="#000000" />
+                    android:orientation="horizontal"
+                    android:paddingBottom="15dp"
+                    android:paddingTop="15dp"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Height"
+                        android:textColor="#bbbbbb" />
+
+                    <TextView
+                        android:id="@+id/userHeight"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        android:text="180cm"
+                        android:textColor="#000000" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#bbbbbb" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingBottom="15dp"
+                    android:paddingTop="15dp"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Weight"
+                        android:textColor="#bbbbbb" />
+
+                    <TextView
+                        android:id="@+id/userWeight"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        android:text="180cm"
+                        android:textColor="#000000" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dip"
+                    android:background="#bbbbbb" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingBottom="15dp"
+                    android:paddingTop="15dp"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Body type"
+                        android:textColor="#bbbbbb" />
+
+                    <TextView
+                        android:id="@+id/userBodyType"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        android:text="180cm"
+                        android:textColor="#000000" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dip"
+                    android:background="#bbbbbb" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingBottom="15dp"
+                    android:paddingTop="15dp"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Relationship"
+                        android:textColor="#bbbbbb" />
+
+                    <TextView
+                        android:id="@+id/userRelationshipStatus"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        android:text="180cm"
+                        android:textColor="#000000" />
+                </LinearLayout>
+
             </LinearLayout>
+        </ScrollView>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#bbbbbb" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingBottom="15dp"
-                android:paddingTop="15dp"
-                android:weightSum="2">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Weight"
-                    android:textColor="#bbbbbb" />
-
-                <TextView
-                    android:id="@+id/userWeight"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="right"
-                    android:text="180cm"
-                    android:textColor="#000000" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dip"
-                android:background="#bbbbbb" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingBottom="15dp"
-                android:paddingTop="15dp"
-                android:weightSum="2">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Body type"
-                    android:textColor="#bbbbbb" />
-
-                <TextView
-                    android:id="@+id/userBodyType"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="right"
-                    android:text="180cm"
-                    android:textColor="#000000" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dip"
-                android:background="#bbbbbb" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingBottom="15dp"
-                android:paddingTop="15dp"
-                android:weightSum="2">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Relationship"
-                    android:textColor="#bbbbbb" />
-
-                <TextView
-                    android:id="@+id/userRelationshipStatus"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="right"
-                    android:text="180cm"
-                    android:textColor="#000000" />
-            </LinearLayout>
-
-        </LinearLayout>
 
     </LinearLayout>
 </LinearLayout>

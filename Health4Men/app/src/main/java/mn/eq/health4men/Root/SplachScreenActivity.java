@@ -11,10 +11,13 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import mn.eq.health4men.Login.LoginActivity;
+import mn.eq.health4men.Members.NewUserDetailActivity;
 import mn.eq.health4men.Objects.UserItem;
 import mn.eq.health4men.R;
 import mn.eq.health4men.Utils.Utils;

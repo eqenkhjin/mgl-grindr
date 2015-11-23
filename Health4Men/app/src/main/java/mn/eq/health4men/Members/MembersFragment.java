@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,8 +27,10 @@ import java.util.ArrayList;
 import java.util.logging.LogRecord;
 
 import mn.eq.health4men.Adapters.AdapterMembers;
+import mn.eq.health4men.Objects.UserImageItem;
 import mn.eq.health4men.Objects.UserItem;
 import mn.eq.health4men.R;
+import mn.eq.health4men.Root.MainActivity;
 import mn.eq.health4men.Root.SplachScreenActivity;
 import mn.eq.health4men.Utils.RecyclerItemClickListener;
 import mn.eq.health4men.Utils.Utils;
@@ -45,10 +49,12 @@ public class MembersFragment extends Fragment {
     private static String TAG = "Members Fragment : ";
     private ProgressDialog progressDialog;
     public static ArrayList<UserItem> arrayList = new ArrayList<>();
+    public static ArrayList<UserImageItem> imgsList = new ArrayList<>();
     public MembersFragment membersFragment;
     public boolean isWaitResponse;
     public boolean canContinue = true;
     private Handler handler;
+    private boolean isList = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,6 +69,8 @@ public class MembersFragment extends Fragment {
 
         handler = new Handler();
 
+
+
         createInterface();
 
         getMembers();
@@ -71,13 +79,13 @@ public class MembersFragment extends Fragment {
     }
 
     private void createInterface(){
+
+
         recyclerView = (RecyclerView)view.findViewById(R.id.recycleView);
         recyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(mLayoutManager);
-        adapterMembers = new AdapterMembers(getActivity(), arrayList);
-        adapterMembers.membersFragment = membersFragment;
-        recyclerView.setAdapter(adapterMembers);
+
+        changingView(true);
 
         recyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
@@ -86,7 +94,7 @@ public class MembersFragment extends Fragment {
 
                         UserItem userItem = arrayList.get(position);
 
-                        final Intent intent = new Intent(getActivity(), UserDetailActivity.class);
+                        final Intent intent = new Intent(getActivity(), NewUserDetailActivity.class);
 
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("detail", userItem);
@@ -96,7 +104,7 @@ public class MembersFragment extends Fragment {
                             public void run() {
                                 getActivity().startActivity(intent);
                             }
-                        }, 500);
+                        }, 300);
 
                         Animation animFadeIn = AnimationUtils.loadAnimation(getContext(),
                                 R.anim.selector);
@@ -106,6 +114,28 @@ public class MembersFragment extends Fragment {
                 })
         );
 
+        MainActivity.whiteStar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isList = (isList) ? false : true;
+
+                changingView(isList);
+
+            }
+        });
+
+    }
+    private void changingView(boolean isList){
+
+        if(isList){
+            recyclerView.setLayoutManager(mLayoutManager);
+        } else {
+            recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
+//           recyclerView.setLayoutManager(new StaggeredGridLayoutManager(4,StaggeredGridLayoutManager.VERTICAL));
+        }
+        adapterMembers = new AdapterMembers(getActivity(), arrayList,isList);
+        adapterMembers.membersFragment = membersFragment;
+        recyclerView.setAdapter(adapterMembers);
     }
 
     public void getMembers() {
@@ -133,13 +163,16 @@ public class MembersFragment extends Fragment {
                     super.onSuccess(statusCode, headers, response);
                     if (progressDialog.isShowing()) progressDialog.dismiss();
                     System.out.println(TAG + "LOGIN SUCCESS" + response.toString());
-
+                    imgsList.clear();
                     arrayList.clear();
 
                     for (int i = 0 ; i < response.length() ; i ++){
 
                         try {
-                            arrayList.add(new UserItem(response.getJSONObject(i)));
+                            UserItem b =new UserItem(response.getJSONObject(i));
+                            arrayList.add(b);
+                            UserImageItem k = new UserImageItem(b.getUserImageURL());
+                            imgsList.add(k);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

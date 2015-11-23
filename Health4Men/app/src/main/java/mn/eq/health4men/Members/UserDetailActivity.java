@@ -8,6 +8,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import mn.eq.health4men.Chat.ChatActivity;
 import mn.eq.health4men.Objects.UserItem;
 import mn.eq.health4men.R;
@@ -23,7 +25,9 @@ public class UserDetailActivity extends FragmentActivity {
     private TextView userAge;
     private TextView userBodyType;
     private TextView userName;
+    private TextView userDistance;
     private ImageButton newMessage;
+    private ImageView userImage;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,8 +38,10 @@ public class UserDetailActivity extends FragmentActivity {
         userHeight = (TextView) findViewById(R.id.userHeight);
         userWeight = (TextView) findViewById(R.id.userWeight);
         userName = (TextView) findViewById(R.id.userName);
+        userDistance = (TextView) findViewById(R.id.userDistance);
         userBodyType = (TextView) findViewById(R.id.userBodyType);
         newMessage = (ImageButton) findViewById(R.id.newMessage);
+        userImage = (ImageView) findViewById(R.id.userImage);
 
         initData();
 
@@ -46,14 +52,21 @@ public class UserDetailActivity extends FragmentActivity {
     private void initData(){
         Bundle bundle = getIntent().getExtras();
         final UserItem userItem;
+
         userItem = (UserItem) bundle.getSerializable("detail");
+        if(userItem.getUserImageURL().length()>3) {
+            Picasso.with(getBaseContext()).load(userItem.getUserImageURL()).into(userImage);
+        } else
+            userImage.setImageResource(R.drawable.placholder_member);
 
         userAboutMe.setText(userItem.getUserAboutme());
-        userAge.setText(userItem.getDistanceBetweenMe());
+        userAge.setText(", "+userItem.getUserAge());
+        userDistance.setText(userItem.getDistanceBetweenMe());
         userHeight.setText(userItem.getUserHeight());
+        System.out.println("HEIGHT : "+userItem.getUserHeight());
         userWeight.setText(userItem.getUserWeight());
         userName.setText(userItem.getUserName());
-        userBodyType.setText(userItem.getUserBodyType());
+//        userBodyType.setText(userItem.getUserBodyType());
 
         newMessage.setOnClickListener(new View.OnClickListener() {
             @Override

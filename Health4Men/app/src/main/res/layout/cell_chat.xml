@@ -5,9 +5,9 @@
     android:layout_height="wrap_content"
     android:background="@android:color/transparent"
     android:orientation="vertical"
-    android:paddingLeft="14dp"
-    android:paddingRight="14dp"
-    android:paddingTop="14dp">
+    android:paddingLeft="18dp"
+    android:paddingRight="18dp"
+    android:paddingTop="4dp">
 
     <LinearLayout
         android:id="@+id/cellUser"
@@ -36,8 +36,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/chat1"
-                android:orientation="vertical"
-                android:paddingLeft="10dp">
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -45,6 +44,7 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:layout_marginLeft="3dp"
                         android:id="@+id/titleUser"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -57,16 +57,23 @@
 
                 </LinearLayout>
 
-
                 <TextView
+                    android:layout_marginLeft="3dp"
                     android:id="@+id/bodyUser"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="4dp"
                     android:gravity="left"
                     android:textColor="#767676"
                     android:textStyle="bold"
                     android:textSize="13sp" />
+
+                <ImageView
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:id="@+id/chat_imageView"
+                    android:visibility="gone"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="5dp"/>
 
             </LinearLayout>
 
@@ -98,7 +105,10 @@
                 android:textColor="@color/colorPrimary"
                 android:textSize="10dp"
                 android:visibility="gone" />
+
+
         </FrameLayout>
+
 
     </LinearLayout>
 
@@ -136,7 +146,6 @@
                             android:id="@+id/titleTeacher"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="4dp"
                             android:gravity="left"
                             android:maxLines="1"
                             android:textColor="#434343"
@@ -144,7 +153,6 @@
                             android:textStyle="bold"/>
 
                     </LinearLayout>
-
 
                     <TextView
                         android:id="@+id/bodyTeacher"
@@ -154,6 +162,13 @@
                         android:gravity="left"
                         android:textColor="#767676"
                         android:textSize="13sp" />
+
+                    <ImageView
+                        android:layout_width="90dp"
+                        android:layout_height="90dp"
+                        android:id="@+id/chat_imageView1"
+                        android:visibility="gone"
+                        android:layout_gravity="left"/>
 
                 </LinearLayout>
 
@@ -199,9 +214,10 @@
                 android:maxLines="1"
                 android:textColor="@color/colorPrimary"
                 android:textSize="10sp" />
+
+
         </FrameLayout>
 
     </LinearLayout>
-
 
 </FrameLayout>
