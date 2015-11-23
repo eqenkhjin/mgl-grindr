@@ -104,7 +104,7 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
         }
     }
     private void createInterface(){
-        progressDialog = new Utils().getProgressDialog(this, "Нэвтэрч байна");
+        progressDialog = new Utils().getProgressDialog(this, "Login...");
 
         toolbar = (FrameLayout) findViewById(R.id.toolbar);
 
@@ -261,7 +261,7 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
                             if (response.getInt("success") == 0) {
                                 SplachScreenActivity.utils.showAlert(MainActivity.this, response.getString("message"));
                             } else {
-                                SplachScreenActivity.utils.showAlert(MainActivity.this, "Мэдээллийг амжилттай илгээлээ");
+                                SplachScreenActivity.utils.showAlert(MainActivity.this, "Information successfully sent");
 
                                 FragmentDrawer.userNameTextView.setText(SplachScreenActivity.userItem.getUserName());
                                 FragmentDrawer.userEmailTextView.setText(SplachScreenActivity.userItem.getUserEmail());
@@ -278,7 +278,7 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                     super.onFailure(statusCode, headers, throwable, errorResponse);
                     if (progressDialog.isShowing()) progressDialog.dismiss();
-                    SplachScreenActivity.utils.showToast("Сервертэй холбогдоход алдаа гарлаа");
+                    SplachScreenActivity.utils.showToast("Error retriving when connecting to server");
                 }
             });
 
