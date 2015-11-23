@@ -1,5 +1,6 @@
 package mn.eq.health4men.Members;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -22,7 +23,8 @@ public class LibraryFragment extends Fragment {
     public UserItem userItem;
     public int currentPosition;
     private LibraryAdapter libraryAdapter;
-
+    private Context context;
+    private Fragment f;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +33,8 @@ public class LibraryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_library,container,false);
-
+        context = getContext();
+        f = this;
         createInterface();
 
         return view;
@@ -44,4 +47,13 @@ public class LibraryFragment extends Fragment {
         viewPager.setAdapter(libraryAdapter);
         viewPager.setCurrentItem(currentPosition);
     }
+
+//    public void onBackPressed() {
+////        if (popUpShowed) {
+////            fragmentTransac.remove(libraryFragment).commit();
+////            popUpShowed = false;
+////        } else {
+////            finish();
+////        }
+//    }
 }

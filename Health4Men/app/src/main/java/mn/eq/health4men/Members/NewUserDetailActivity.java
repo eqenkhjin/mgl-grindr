@@ -47,11 +47,12 @@ public class NewUserDetailActivity extends FragmentActivity {
     private TextView userHeight;
     private TextView userWeight;
     private TextView userAge;
-    private TextView userBodyType;
+    private TextView userLookingFor;
     private TextView userName;
-    private TextView userInfo;
+    private TextView userRole;
     private TextView userDistance;
     private TextView photoQuantity;
+    private TextView userLocation;
     private ImageButton newMessage;
     private ImageView userImage;
     private FloatingActionButton msgButton;
@@ -66,6 +67,7 @@ public class NewUserDetailActivity extends FragmentActivity {
     private FragmentManager fragmentManager;
     private LibraryFragment libraryFragment;
     private boolean popUpShowed = false;
+    private LinearLayout albumLinear;
     FragmentTransaction fragmentTransac;
 
     @Override
@@ -111,10 +113,16 @@ public class NewUserDetailActivity extends FragmentActivity {
                 userImage.setImageResource(R.drawable.placholder_member);
             userName.setText(userItem.getUserName());
             userAboutMe.setText(userItem.getUserAboutme());
+            if(userItem.getAlbum().size() == 0){
+                albumLinear.setVisibility(View.INVISIBLE);
+            }
             photoQuantity.setText("Photos (" + userItem.getAlbum().size() + ")");
             if (userItem.isMemberOnline())
                 onlineView.setBackgroundResource(R.drawable.border_online);
             else onlineView.setBackgroundResource(R.drawable.border_offline);
+            userAge.setText(userItem.getUserAge());
+            userHeight.setText(userItem.getUserHeight());
+            userWeight.setText(userItem.getUserWeight());
         }
 //        userAge.setText(", "+userItem.getUserAge());
 //        userDistance.setText(userItem.getDistanceBetweenMe());
@@ -141,19 +149,19 @@ public class NewUserDetailActivity extends FragmentActivity {
 
     private void createInterfaceByCode() {
 
-        userAboutMe.setPadding(10, 5, deviceWidth / 5 + 30, 5);
+//        userAboutMe.setPadding(10, 5, 100, 5);
 
-        userImage.getLayoutParams().height = deviceHeight / 5 * 3;
+//        userImage.getLayoutParams().height = deviceHeight / 5 * 3;
 
         scaledLinear.getLayoutParams().height = deviceWidth / 4;
 
-        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(msgButton.getLayoutParams());
-        msgButton.getLayoutParams().width = deviceWidth / 5;
-        msgButton.getLayoutParams().height = deviceWidth / 5;
-        lp.setMargins(0, -deviceWidth / 8, 30, 0);
-        lp.addRule(RelativeLayout.BELOW, R.id.userImage);
-        lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        msgButton.setLayoutParams(lp);
+//        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(msgButton.getLayoutParams());
+//        msgButton.getLayoutParams().width = deviceWidth / 5;
+//        msgButton.getLayoutParams().height = deviceWidth / 5;
+//        lp.setMargins(0, -deviceWidth / 8, 30, 0);
+//        lp.addRule(RelativeLayout.BELOW, R.id.userImage);
+//        lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+//        msgButton.setLayoutParams(lp);
 
         recyclerView.getLayoutParams().height = deviceWidth / 4;
 
@@ -163,18 +171,18 @@ public class NewUserDetailActivity extends FragmentActivity {
     private void createInterface() {
 
         userAboutMe = (TextView) findViewById(R.id.userAboutme);
-//        userAge = (TextView) findViewById(R.id.userAge);
-//        userHeight = (TextView) findViewById(R.id.userHeight);
-//        userWeight = (TextView) findViewById(R.id.userWeight);
+        userAge = (TextView) findViewById(R.id.userAge);
+        userHeight = (TextView) findViewById(R.id.userHeight);
+        userWeight = (TextView) findViewById(R.id.userWeight);
         userName = (TextView) findViewById(R.id.userName);
-//        userDistance = (TextView) findViewById(R.id.userDistance);
-//        userBodyType = (TextView) findViewById(R.id.userBodyType);
-//        newMessage = (ImageButton) findViewById(R.id.newMessage);
         userImage = (ImageView) findViewById(R.id.userImage);
-//        userInfo = (TextView) findViewById(R.id.userInfo);
+        userLookingFor = (TextView) findViewById(R.id.userLookingFor);
+        userLocation = (TextView) findViewById(R.id.userLocation);
+        userRole = (TextView) findViewById(R.id.userRole);
         onlineView = findViewById(R.id.onlineView);
         scaledLinear = (LinearLayout) findViewById(R.id.scaleLinear);
         photoQuantity = (TextView) findViewById(R.id.photoQuantity);
+        albumLinear = (LinearLayout) findViewById(R.id.album_linear);
         recyclerView = (RecyclerView) findViewById(R.id.imgList);
         msgButton = (FloatingActionButton) findViewById(R.id.msgButton);
         recyclerView.setHasFixedSize(true);
@@ -232,19 +240,29 @@ public class NewUserDetailActivity extends FragmentActivity {
     }
 
     public void showLibrary(int position) {
-        if (fragmentTransac == null)fragmentTransac = fragmentManager.beginTransaction();
-
+        if (fragmentTransac == null) fragmentTransac = fragmentManager.beginTransaction();
+        popUpShowed = true;
         libraryFragment = new LibraryFragment();
         libraryFragment.userItem = userItem;
         libraryFragment.currentPosition = position;
 
         fragmentTransac.add(R.id.container, libraryFragment);
+
         fragmentTransac.commit();
-        popUpShowed = true;
+
     }
 
     @Override
     public void onBackPressed() {
+//        int count = getFragmentManager().getBackStackEntryCount();
+//        getFragmentManager().popBackStack();
+
+//        if(count==0){
+//            super.onBackPressed();
+//        } else {
+//            getFragmentManager().popBackStack();
+//
+//        }
         if (popUpShowed) {
             fragmentTransac.remove(libraryFragment).commit();
             popUpShowed = false;

@@ -62,6 +62,7 @@ public class UserItem implements Serializable {
         if (checkIsEmpty(object.getString("weight")))this.userWeight = noInformation;
         else this.userWeight = object.getString("weight");
 
+
         if (checkIsEmpty(object.getString("age")))this.userAge = noInformation;
         else this.userAge = object.getString("age");
 
