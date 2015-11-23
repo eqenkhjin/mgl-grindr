@@ -6,6 +6,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -29,6 +31,7 @@ import java.util.ArrayList;
 import mn.eq.health4men.Adapters.AdapterImages;
 import mn.eq.health4men.Adapters.AdapterMembers;
 import mn.eq.health4men.Chat.ChatActivity;
+import mn.eq.health4men.Chat.ImageFragment;
 import mn.eq.health4men.Objects.UserImageItem;
 import mn.eq.health4men.Objects.UserItem;
 import mn.eq.health4men.R;
@@ -60,12 +63,17 @@ public class NewUserDetailActivity extends FragmentActivity {
     private UserItem userItem;
     private int deviceHeight;
     private int deviceWidth;
+    private FragmentManager fragmentManager;
+    private LibraryFragment libraryFragment;
+    private boolean popUpShowed = false;
+    FragmentTransaction fragmentTransac;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_detail);
         getDeviceWidth();
+        fragmentManager = getSupportFragmentManager();
 
         Bundle bundle = getIntent().getExtras();
         userItem = (UserItem) bundle.getSerializable("detail");
@@ -186,8 +194,7 @@ public class NewUserDetailActivity extends FragmentActivity {
                     @Override
                     public void onItemClick(View view, int position) {
 
-                        UserImageItem userImage = userItem.getAlbum().get(position);
-
+                        showLibrary(position);
 //                        final Intent intent = new Intent(getActivity(), NewUserDetailActivity.class);
 //
 //                        Bundle bundle = new Bundle();
@@ -222,5 +229,27 @@ public class NewUserDetailActivity extends FragmentActivity {
             }
         });
 
+    }
+
+    public void showLibrary(int position) {
+        if (fragmentTransac == null)fragmentTransac = fragmentManager.beginTransaction();
+
+        libraryFragment = new LibraryFragment();
+        libraryFragment.userItem = userItem;
+        libraryFragment.currentPosition = position;
+
+        fragmentTransac.add(R.id.container, libraryFragment);
+        fragmentTransac.commit();
+        popUpShowed = true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (popUpShowed) {
+            fragmentTransac.remove(libraryFragment).commit();
+            popUpShowed = false;
+        } else {
+            finish();
+        }
     }
 }
