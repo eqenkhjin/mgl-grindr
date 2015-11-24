@@ -2,6 +2,7 @@ package mn.eq.health4men.Adapters;
 
 import android.content.Context;
 import android.location.Location;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 import mn.eq.health4men.Members.MembersFragment;
+import mn.eq.health4men.Objects.UserImageItem;
 import mn.eq.health4men.Objects.UserItem;
 import mn.eq.health4men.R;
 import mn.eq.health4men.Root.MainActivity;
@@ -34,6 +36,8 @@ public class AdapterMembers extends RecyclerView.Adapter<AdapterMembers.ViewHold
     private Context context;
     private int lastPosition = -1;
     public MembersFragment membersFragment;
+
+
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 

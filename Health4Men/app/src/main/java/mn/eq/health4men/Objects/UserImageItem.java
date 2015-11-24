@@ -10,7 +10,7 @@ import java.io.Serializable;
  */
 public class UserImageItem implements Serializable {
 
-
+    private int imageId;
     private String imageURL;
     private boolean canShow;
 
@@ -22,6 +22,7 @@ public class UserImageItem implements Serializable {
         else this.canShow = false;
 
         this.imageURL = object.getString("picture");
+        this.imageId = object.getInt("imageId");
     }
 
     public String getImageURL() {
@@ -43,5 +44,11 @@ public class UserImageItem implements Serializable {
     private boolean checkIsEmpty(String str){
         if (str.replace(" ","").length() == 0)return true;
         return false;
+    }
+    public void setImageId(int id){
+        this.imageId = id;
+    }
+    public int getImageId(){
+        return imageId;
     }
 }
