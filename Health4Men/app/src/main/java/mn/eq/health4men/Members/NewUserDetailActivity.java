@@ -66,7 +66,7 @@ public class NewUserDetailActivity extends FragmentActivity {
     private int deviceWidth;
     private FragmentManager fragmentManager;
     private LibraryFragment libraryFragment;
-    private boolean popUpShowed = false;
+    public static boolean popUpShowed = false;
     private LinearLayout albumLinear;
     FragmentTransaction fragmentTransac;
 

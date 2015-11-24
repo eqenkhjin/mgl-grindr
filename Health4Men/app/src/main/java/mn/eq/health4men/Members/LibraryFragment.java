@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import mn.eq.health4men.Adapters.LibraryAdapter;
+import mn.eq.health4men.Chat.ChatActivity;
 import mn.eq.health4men.Objects.UserItem;
 import mn.eq.health4men.R;
 
@@ -23,7 +24,7 @@ public class LibraryFragment extends Fragment {
     public UserItem userItem;
     public int currentPosition;
     private LibraryAdapter libraryAdapter;
-
+    public LibraryFragment libraryFragment;
 
     public static LibraryFragment newInstance(){
         LibraryFragment libraryFragment = new LibraryFragment();
@@ -39,6 +40,7 @@ public class LibraryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_library,container,false);
+        libraryFragment = this;
         createInterface();
 
         return view;
@@ -47,8 +49,15 @@ public class LibraryFragment extends Fragment {
     private void createInterface(){
         viewPager = (ViewPager) view.findViewById(R.id.viewPager);
         libraryAdapter = new LibraryAdapter(getActivity().getSupportFragmentManager(),userItem
-                .getAlbum());
+                .getAlbum(),libraryFragment);
         viewPager.setAdapter(libraryAdapter);
         viewPager.setCurrentItem(currentPosition);
+
+    }
+
+    public void hide(){
+        getActivity().getSupportFragmentManager().beginTransaction().remove(LibraryFragment.this)
+                .commit();
+        NewUserDetailActivity.popUpShowed = false;
     }
 }

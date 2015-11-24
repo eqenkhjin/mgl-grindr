@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import mn.eq.health4men.Members.LibraryFragment;
 import mn.eq.health4men.R;
 
 
@@ -26,6 +27,7 @@ public class ImageFragment extends Fragment {
     private ImageView bigImageView;
     public int type;
     private FrameLayout back;
+    public LibraryFragment libraryFragment;
 
     public static ImageFragment newInstance(String imageURL){
         ImageFragment imageFragment = new ImageFragment();
@@ -59,9 +61,7 @@ public class ImageFragment extends Fragment {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getActivity().getSupportFragmentManager().beginTransaction().remove(ImageFragment.this)
-                        .commit();
-                ChatActivity.isPopupShowed = false;
+                libraryFragment.hide();
 
             }
         });

@@ -187,7 +187,8 @@ public class ChatActivity extends FragmentActivity {
             public void onTick(long l) {
                 if (isFirstLaunch) {
                     if (progressDialog == null) {
-                        progressDialog = SplachScreenActivity.utils.getProgressDialog(ChatActivity.this, "Ачааллаж байна");
+                        progressDialog = SplachScreenActivity.utils.getProgressDialog
+                                (ChatActivity.this, "Loading");
                         progressDialog.show();
                     }
                     getBeforeZurvas();
@@ -259,7 +260,7 @@ public class ChatActivity extends FragmentActivity {
                 if (progressDialog.isShowing()) progressDialog.dismiss();
                 if (isFirstLaunch) {
                     isFirstLaunch = false;
-                    showToast("Интернет холболт байхгүй байна");
+                    showToast(getString(R.string.no_internet));
                 }
 
             }
