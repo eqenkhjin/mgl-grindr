@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -15,6 +16,7 @@ import org.w3c.dom.Text;
 
 import mn.eq.health4men.Members.LibraryFragment;
 import mn.eq.health4men.R;
+import mn.eq.health4men.Root.MainActivity;
 
 /**
  * Created by Tamir on 11/24/2015.
@@ -29,6 +31,7 @@ public class AlbumImageFragment extends Fragment {
     public int type;
     private FrameLayout back;
     public LibraryFragment libraryFragment;
+    private RelativeLayout layout;
 
     public static AlbumImageFragment newInstance(String imageURL){
         AlbumImageFragment imageFragment = new AlbumImageFragment();
@@ -57,7 +60,10 @@ public class AlbumImageFragment extends Fragment {
     public void createInterface(){
         bigImageView = (ImageView) view.findViewById(R.id.big_image);
         permission = (TextView) view.findViewById(R.id.permission);
+        layout = (RelativeLayout) view.findViewById(R.id.album_relative);
+        layout.getLayoutParams().width = MainActivity.deviceWidth/2;
         Picasso.with(getActivity()).load(imageURL).into(bigImageView);
+
         if(type == 1){
             permission.setText("public");
         } else {
@@ -66,7 +72,7 @@ public class AlbumImageFragment extends Fragment {
         permission.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                
+
             }
         });
         back = (FrameLayout) view.findViewById(R.id.back);

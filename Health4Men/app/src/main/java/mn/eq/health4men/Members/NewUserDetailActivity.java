@@ -121,6 +121,8 @@ public class NewUserDetailActivity extends FragmentActivity {
             userAge.setText(userItem.getUserAge());
             userHeight.setText(userItem.getUserHeight());
             userWeight.setText(userItem.getUserWeight());
+            userLookingFor.setText(userItem.getUserLookingFor());
+            userRole.setText(userItem.getUserRole());
         }
 //        userAge.setText(", "+userItem.getUserAge());
 //        userDistance.setText(userItem.getDistanceBetweenMe());
@@ -242,6 +244,7 @@ public class NewUserDetailActivity extends FragmentActivity {
         libraryFragment = LibraryFragment.newInstance();
         libraryFragment.userItem = userItem;
         libraryFragment.currentPosition = position;
+        libraryFragment.b = true;
         fragmentTransac.add(R.id.container, libraryFragment);
         fragmentTransac.commit();
         popUpShowed = true;

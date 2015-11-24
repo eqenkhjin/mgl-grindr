@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 import java.util.ArrayList;
 
+import mn.eq.health4men.Album.AlbumImageFragment;
 import mn.eq.health4men.Chat.ImageFragment;
 import mn.eq.health4men.Members.LibraryFragment;
 import mn.eq.health4men.Objects.UserImageItem;
@@ -17,12 +18,14 @@ public class LibraryAdapter extends FragmentStatePagerAdapter {
 
     ArrayList<UserImageItem> arrayList;
     public LibraryFragment libraryFragment;
+    private boolean b;
 
     public LibraryAdapter(FragmentManager fragmentManager,ArrayList<UserImageItem> arrayList,
-                          LibraryFragment libraryFragment){
+                          LibraryFragment libraryFragment,boolean b){
         super(fragmentManager);
         this.arrayList = arrayList;
         this.libraryFragment = libraryFragment;
+        this.b = b;
     }
 
 
@@ -30,10 +33,17 @@ public class LibraryAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
 
-        UserImageItem userImageItem = arrayList.get(position);
-        ImageFragment imageFragment = ImageFragment.newInstance(userImageItem.getImageURL());
-        imageFragment.libraryFragment = libraryFragment;
-        return imageFragment;
+        if(b){
+            UserImageItem userImageItem = arrayList.get(position);
+            ImageFragment imageFragment = ImageFragment.newInstance(userImageItem.getImageURL());
+            imageFragment.libraryFragment = libraryFragment;
+            return imageFragment;
+        } else {
+            UserImageItem userImageItem = arrayList.get(position);
+            AlbumImageFragment imageFragment = AlbumImageFragment.newInstance(userImageItem.getImageURL());
+            imageFragment.libraryFragment = libraryFragment;
+            return imageFragment;
+        }
     }
 
     @Override

@@ -93,7 +93,7 @@ public class MyAlbum extends Fragment {
                     @Override
                     public void onItemClick(View view, int position) {
 
-                            showLibrary(position);
+                          showLibrary(position);
 //                        UserItem userItem = arrayList.get(position);
 //
 //                        final Intent intent = new Intent(getActivity(), NewUserDetailActivity.class);
@@ -137,6 +137,7 @@ public class MyAlbum extends Fragment {
         libraryFragment = LibraryFragment.newInstance();
         libraryFragment.userItem = SplachScreenActivity.userItem;
         libraryFragment.currentPosition = position;
+        libraryFragment.b = false;
         fragmentTransac.add(R.id.album_frame, libraryFragment);
         fragmentTransac.commit();
 //        popUpShowed = true;

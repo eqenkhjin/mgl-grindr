@@ -20,6 +20,7 @@ public class LibraryFragment extends Fragment {
     private View view;
     public static ViewPager viewPager;
     public UserItem userItem;
+    public boolean b;
     public int currentPosition;
     private LibraryAdapter libraryAdapter;
     public LibraryFragment libraryFragment;
@@ -48,7 +49,7 @@ public class LibraryFragment extends Fragment {
 
         viewPager = (ViewPager) view.findViewById(R.id.viewPager);
         libraryAdapter = new LibraryAdapter(getActivity().getSupportFragmentManager(),userItem
-                .getAlbum(),libraryFragment);
+                .getAlbum(),libraryFragment,b);
         viewPager.setAdapter(libraryAdapter);
         viewPager.setCurrentItem(currentPosition);
 
