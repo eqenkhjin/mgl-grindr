@@ -45,7 +45,7 @@ public class LoginActivity extends RootActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        progressDialog = new Utils().getProgressDialog(this, "Нэвтэрч байна");
+        progressDialog = new Utils().getProgressDialog(this, "Logged in");
         createInterface();
     }
 
@@ -117,7 +117,7 @@ public class LoginActivity extends RootActivity {
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                     super.onFailure(statusCode, headers, throwable, errorResponse);
                     if (progressDialog.isShowing()) progressDialog.dismiss();
-                    SplachScreenActivity.utils.showToast("Сервертэй холбогдоход алдаа гарлаа");
+                    SplachScreenActivity.utils.showToast(getString(R.string.server_error));
                 }
             });
 
@@ -130,7 +130,7 @@ public class LoginActivity extends RootActivity {
     private boolean checkIsEmpty() {
         if (emailEditText.getText().toString().length() == 0
                 || passwordEditText.getText().toString().length() == 0) {
-            SplachScreenActivity.utils.showToast("Бүрэн бөглөнө үү");
+            SplachScreenActivity.utils.showToast("Please fill all fields");
             return false;
         }
         return true;

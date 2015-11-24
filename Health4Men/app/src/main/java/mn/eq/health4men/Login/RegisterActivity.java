@@ -43,7 +43,7 @@ public class RegisterActivity extends RootActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        progressDialog = SplachScreenActivity.utils.getProgressDialog(this, "Бүртгүүлж байна");
+        progressDialog = SplachScreenActivity.utils.getProgressDialog(this, "Registering");
 
         configHeader();
         createInterface();
@@ -90,7 +90,7 @@ public class RegisterActivity extends RootActivity {
                 || passwordEditText.getText().toString().length() == 0
                 || confirmPasswordEditText.getText().toString().length() == 0
                 || ageEditText.getText().toString().length() == 0) {
-            SplachScreenActivity.utils.showToast("Бүрэн бөглөнө үү");
+            SplachScreenActivity.utils.showToast("Please fill all fields");
             return false;
         }
         return true;
@@ -100,7 +100,7 @@ public class RegisterActivity extends RootActivity {
         if (passwordEditText.getText().toString().equalsIgnoreCase(confirmPasswordEditText.getText().toString()))
             return true;
         else{
-            SplachScreenActivity.utils.showToast("Нууц үг таарахгүй байна");
+            SplachScreenActivity.utils.showToast("Password didn't match");
             return false;
         }
     }
@@ -150,7 +150,7 @@ public class RegisterActivity extends RootActivity {
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                     super.onFailure(statusCode, headers, throwable, errorResponse);
                     if (progressDialog.isShowing()) progressDialog.dismiss();
-                    SplachScreenActivity.utils.showToast("Сервертэй холбогдоход алдаа гарлаа");
+                    SplachScreenActivity.utils.showToast(getString(R.string.server_error));
                 }
             });
 

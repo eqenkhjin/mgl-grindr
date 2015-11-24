@@ -85,16 +85,6 @@
                 android:layout_marginRight="8dp"
                 android:padding="6dp"/>
 
-
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/starImageView"
-                android:src="@drawable/star_gray"
-                android:background="?attr/selectableItemBackground"
-                android:layout_marginRight="12dp"
-                android:padding="6dp"/>
-
         </LinearLayout>
 
         <View

@@ -43,7 +43,7 @@ public class MembersFragment extends Fragment {
     private View view;
     private RecyclerView recyclerView;
     private LinearLayoutManager mLayoutManager;
-    public AdapterMembers adapterMembers;
+    public static AdapterMembers adapterMembers;
     public int pageIndex = 1;
     private int perPage = 50;
     private static String TAG = "Members Fragment : ";
@@ -118,6 +118,7 @@ public class MembersFragment extends Fragment {
             public void onClick(View v) {
                 isList = (isList) ? false : true;
 
+                MainActivity.whiteStar.setSelected(!MainActivity.whiteStar.isSelected());
                 changingView(isList);
 
             }
@@ -193,6 +194,12 @@ public class MembersFragment extends Fragment {
         } else {
             SplachScreenActivity.utils.showNoInternetAlert(getActivity());
         }
+
+    }
+
+    public void searchResult(String name){
+
+        
 
     }
 }

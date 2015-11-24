@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Point;
 import android.location.Location;
 import android.os.Build;
+import android.os.CountDownTimer;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -21,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -37,6 +39,7 @@ import com.loopj.android.http.RequestParams;
 import com.squareup.picasso.Picasso;
 
 import org.apache.http.Header;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -48,6 +51,8 @@ import mn.eq.health4men.LeftMenu.FragmentDrawer;
 import mn.eq.health4men.Login.LoginActivity;
 import mn.eq.health4men.Map.FragmentMap;
 import mn.eq.health4men.Members.MembersFragment;
+import mn.eq.health4men.Objects.IsOnline;
+import mn.eq.health4men.Objects.UserItem;
 import mn.eq.health4men.R;
 import mn.eq.health4men.Root.RootActivity;
 import mn.eq.health4men.UserEdit.PopUpFragment;
@@ -78,6 +83,12 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
     public static int deviceWidth;
     public static int deviceHeight;
     public static FloatingActionButton msgButton;
+    private ImageButton searchButton;
+    private CountDownTimer isOnlineTimer;
+    private ArrayList<IsOnline> isOnlineArrayList = new ArrayList<>();
+    private boolean onlineRequestFinished = true,isSearchEnabled = false;
+    private LinearLayout toolbarLayout;
+    private EditText searchEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +100,8 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
         getDeviceWidth();
         createInterface();
     }
-    private void getDeviceWidth(){
+
+    private void getDeviceWidth() {
         WindowManager w = getWindowManager();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
@@ -104,7 +116,8 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
 
         }
     }
-    private void createInterface(){
+
+    private void createInterface() {
         progressDialog = new Utils().getProgressDialog(this, "Нэвтэрч байна");
 
         toolbar = (FrameLayout) findViewById(R.id.toolbar);
@@ -120,13 +133,6 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
             }
         });
 
-        whiteStar = (ImageButton) findViewById(R.id.whiteStar);
-        whiteStar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
         drawerFragment = (FragmentDrawer)
                 getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -143,12 +149,119 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
             }
         });
 
+        whiteStar = (ImageButton) findViewById(R.id.whiteStar);
+
+        searchButton = (ImageButton) findViewById(R.id.search);
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!isSearchEnabled){
+
+                    toolbarLayout.setVisibility(View.GONE);
+                    searchEditText.setVisibility(View.VISIBLE);
+                    isSearchEnabled = !isSearchEnabled;
+
+                }else {
+
+                    toolbarLayout.setVisibility(View.VISIBLE);
+                    searchEditText.setVisibility(View.GONE);
+                    isSearchEnabled = !isSearchEnabled;
+
+                }
+            }
+        });
+
+        searchEditText = (EditText) findViewById(R.id.searchEditText);
+        toolbarLayout = (LinearLayout) findViewById(R.id.toolbarLayout);
+
         displayView(0);
 
         if (checkPlayServices()) {
 
             buildGoogleApiClient();
         }
+
+        isOnlineRequest();
+
+    }
+
+    private void isOnlineRequest() {
+        isOnlineTimer = new CountDownTimer(2500000, 5000) {
+            @Override
+            public void onTick(long l) {
+
+                if(onlineRequestFinished){
+                    onlineRequestFinished = false;
+                    isOnlineRequestToServer();
+                }
+            }
+
+            @Override
+            public void onFinish() {
+                this.cancel();
+            }
+        };
+    }
+
+    private void isOnlineRequestToServer() {
+
+        if (SplachScreenActivity.utils.isNetworkConnected(this)) {
+
+            String url = Utils.MAIN_HOST + "is_online.php";
+            Utils.client.get(url, new JsonHttpResponseHandler() {
+
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                    super.onSuccess(statusCode, headers, response);
+
+                    isOnlineArrayList.clear();
+
+                    for (int i = 0; i < response.length(); i++) {
+                        try {
+                            isOnlineArrayList.add(new IsOnline(response.getJSONObject(i)));
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    configMainListFromIsOnline();
+                    MembersFragment.adapterMembers.notifyDataSetChanged();
+                    onlineRequestFinished = true;
+
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                    super.onFailure(statusCode, headers, throwable, errorResponse);
+                    onlineRequestFinished = true;
+                }
+            });
+        }else {
+            SplachScreenActivity.utils.showToast(getString(R.string.no_internet));
+            onlineRequestFinished = true;
+        }
+    }
+
+    private void configMainListFromIsOnline() {
+
+        for (IsOnline isOnline : isOnlineArrayList) {
+            changeIsOnline(isOnline);
+        }
+
+    }
+
+    private void changeIsOnline(IsOnline isOnline) {
+
+        for (UserItem userItem : MembersFragment.arrayList) {
+
+            if (userItem.getUserID() == isOnline.getUserID()) {
+                userItem.setMemberOnline(isOnline.isOnline());
+                return;
+            }
+
+        }
+
     }
 
     @Override
@@ -162,12 +275,12 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
         String title = getString(R.string.app_name);
 
         if (position == lastSelectedIndex) return;
-        if (position != 6)lastSelectedIndex = position;
+        if (position != 6) lastSelectedIndex = position;
 
-        if (position == 2){
+        if (position == 2) {
             whiteStar.setVisibility(View.GONE);
             done.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             whiteStar.setVisibility(View.VISIBLE);
             done.setVisibility(View.GONE);
         }
@@ -198,12 +311,12 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
 
         if (position == 3) {
 
-            Intent intent = new Intent(MainActivity.this,LoginActivity.class);
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
 
             finish();
 
-        }else {
+        } else {
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.container, fragment);
             fragmentTransaction.commit();
@@ -213,7 +326,7 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
 
     }
 
-    public void showPopUp(int type,ProfileEditFragment profileEditFragment) {
+    public void showPopUp(int type, ProfileEditFragment profileEditFragment) {
         FragmentTransaction fragmentTransac = fragmentManager.beginTransaction();
         PopUpFragment popUpFragment = PopUpFragment.newInstance(type);
         popUpFragment.profileEditFragment = profileEditFragment;
@@ -289,26 +402,6 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
 
     }
 
-    @Override
-    public void onBackPressed() {
-        new AlertDialog.Builder(this)
-                .setTitle(getString(R.string.app_name_mn))
-                .setMessage(getString(R.string.quit))
-                .setPositiveButton("Quit", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // do nothing
-                    }
-                })
-                .setIcon(R.drawable.alert_logo)
-                .show();
-
-    }
-
     private boolean checkPlayServices() {
         int resultCode = GooglePlayServicesUtil
                 .isGooglePlayServicesAvailable(this);
@@ -346,7 +439,7 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
         mLastLocation = LocationServices.FusedLocationApi
                 .getLastLocation(mGoogleApiClient);
 
-        if (membersFragment != null){
+        if (membersFragment != null) {
             membersFragment.adapterMembers.notifyDataSetChanged();
         }
 
@@ -362,5 +455,31 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
 
     }
 
+    @Override
+    public void onBackPressed() {
+
+        if (isSearchEnabled){
+            toolbarLayout.setVisibility(View.VISIBLE);
+            searchEditText.setVisibility(View.GONE);
+            isSearchEnabled = !isSearchEnabled;
+        }else {
+            new AlertDialog.Builder(this)
+                    .setTitle(getString(R.string.app_name_mn))
+                    .setMessage(getString(R.string.quit))
+                    .setPositiveButton("Quit", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // do nothing
+                        }
+                    })
+                    .setIcon(R.drawable.alert_logo)
+                    .show();
+        }
+
+    }
 
 }

@@ -87,7 +87,7 @@ public class UserItem implements Serializable {
         }
 
         if (MainActivity.mLastLocation == null){
-            distanceBetweenMe = "Can't find your location.";
+            distanceBetweenMe = "Can't find location.";
         }else {
             if (this.userCoordinateX.length() > 3 && this.userCooordinateY.length() > 3){
                 Location loc2 = new Location("");

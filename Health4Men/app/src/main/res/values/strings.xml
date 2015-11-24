@@ -10,4 +10,6 @@
     <string name="error">There was a problem retrieving information</string>
     <string name="loading">Loading</string>
 
+    <string name="server_error">There was a error retrieving connected to server</string>
+
 </resources>
