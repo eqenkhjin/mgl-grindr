@@ -2,7 +2,6 @@ package mn.eq.health4men.Adapters;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import java.util.ArrayList;
@@ -25,6 +24,8 @@ public class LibraryAdapter extends FragmentStatePagerAdapter {
         this.arrayList = arrayList;
         this.libraryFragment = libraryFragment;
     }
+
+
 
     @Override
     public Fragment getItem(int position) {

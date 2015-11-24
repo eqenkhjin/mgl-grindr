@@ -54,6 +54,7 @@ public class MyAlbum extends Fragment {
     private  ArrayList<UserImageItem> arrayList = new ArrayList<>();
     private FragmentManager fragmentManager;
     private LibraryFragment libraryFragment;
+    private UserItem userItem;
 
 
     @Override
@@ -84,12 +85,15 @@ public class MyAlbum extends Fragment {
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         adapterAlbum = new AdapterAlbum(getActivity(), arrayList);
         recyclerView.setAdapter(adapterAlbum);
+        SplachScreenActivity.userItem.setAlbum(arrayList);
+//        userItem.setAlbum(SplachScreenActivity.userItem.getAlbum());
 
         recyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
 
+                            showLibrary(position);
 //                        UserItem userItem = arrayList.get(position);
 //
 //                        final Intent intent = new Intent(getActivity(), NewUserDetailActivity.class);
@@ -111,6 +115,7 @@ public class MyAlbum extends Fragment {
                     }
                 })
 
+
         );
 
         addPhoto.setOnClickListener(new View.OnClickListener() {
@@ -127,15 +132,15 @@ public class MyAlbum extends Fragment {
         });
 
     }
-//    public void showLibrary(int position) {
-//        FragmentTransaction fragmentTransac = fragmentManager.beginTransaction();
-//        libraryFragment = LibraryFragment.newInstance();
-//        libraryFragment.userItem = userItem;
-//        libraryFragment.currentPosition = position;
-//        fragmentTransac.add(R.id.container, libraryFragment);
-//        fragmentTransac.commit();
+    public void showLibrary(int position) {
+        FragmentTransaction fragmentTransac = fragmentManager.beginTransaction();
+        libraryFragment = LibraryFragment.newInstance();
+        libraryFragment.userItem = SplachScreenActivity.userItem;
+        libraryFragment.currentPosition = position;
+        fragmentTransac.add(R.id.album_frame, libraryFragment);
+        fragmentTransac.commit();
 //        popUpShowed = true;
-//    }
+    }
     public void getPhotos() {
 
 //        if (!canContinue)return;
