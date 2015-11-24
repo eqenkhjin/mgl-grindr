@@ -50,8 +50,10 @@ public class AdapterAlbum extends RecyclerView.Adapter<AdapterAlbum.ViewHolder> 
 
         public ViewHolder(View v) {
             super(v);
-            layout = (RelativeLayout) v.findViewById(R.id.row_image_relative);
-            albumImage = (ImageView) v.findViewById(R.id.imgPicture);
+            layout = (RelativeLayout) v.findViewById(R.id.row_album_relative);
+            albumImage = (ImageView) v.findViewById(R.id.row_album_img);
+            albumImage.getLayoutParams().height = MainActivity.deviceWidth/2;
+
 
         }
     }

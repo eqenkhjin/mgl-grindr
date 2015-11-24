@@ -102,8 +102,12 @@ public class FragmentDrawer extends Fragment {
         userEmailTextView.setText(SplachScreenActivity.userItem.getUserEmail());
 
         userImageView = (ImageView) layout.findViewById(R.id.userImageView);
-        Picasso.with(getActivity()).load(SplachScreenActivity.userItem.getUserImageURL()).into(userImageView);
 
+        if (SplachScreenActivity.userItem.getUserImageURL().length() > 3) {
+            Picasso.with(getActivity()).load(SplachScreenActivity.userItem.getUserImageURL()).into(userImageView);
+        } else {
+            userImageView.setImageResource(R.drawable.placholder_member);
+        }
         return layout;
     }
 

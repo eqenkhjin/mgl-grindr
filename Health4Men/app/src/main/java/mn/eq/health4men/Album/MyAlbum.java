@@ -1,5 +1,6 @@
 package mn.eq.health4men.Album;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,6 +15,14 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import org.apache.http.Header;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 import mn.eq.health4men.Adapters.AdapterMembers;
@@ -22,6 +31,7 @@ import mn.eq.health4men.Objects.UserImageItem;
 import mn.eq.health4men.Objects.UserItem;
 import mn.eq.health4men.R;
 import mn.eq.health4men.Root.MainActivity;
+import mn.eq.health4men.Root.SplachScreenActivity;
 import mn.eq.health4men.Utils.RecyclerItemClickListener;
 import mn.eq.health4men.Utils.Utils;
 
@@ -29,12 +39,15 @@ import mn.eq.health4men.Utils.Utils;
  * Created by Tamir on 11/23/2015.
  */
 public class MyAlbum extends Fragment {
+
+    private ProgressDialog progressDialog;
     private View view;
     private RecyclerView recyclerView;
     private ImageButton addPhoto;
     private ImageButton removePhoto;
     private LinearLayoutManager mLayoutManager;
     private AdapterAlbum adapterAlbum;
+    private static String TAG = "MyAlbum fragment : ";
     public static ArrayList<UserImageItem> arrayList = new ArrayList<>();
 
 
@@ -45,7 +58,10 @@ public class MyAlbum extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_album,container,false);
+        view = inflater.inflate(R.layout.fragment_album, container, false);
+        progressDialog = new Utils().getProgressDialog(getActivity(), "Getting photos");
+        getPhotos();
+
         createInterface();
         return view;
     }
@@ -59,7 +75,7 @@ public class MyAlbum extends Fragment {
         mLayoutManager = new LinearLayoutManager(getActivity());
 
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-//        adapterAlbum = new AdapterMembers(getContext(), arrayList);
+        adapterAlbum = new AdapterAlbum(getActivity(), arrayList);
         recyclerView.setAdapter(adapterAlbum);
 
         recyclerView.addOnItemTouchListener(
@@ -103,5 +119,62 @@ public class MyAlbum extends Fragment {
         });
 
     }
+    public void getPhotos() {
+
+//        if (!canContinue)return;
+
+        if (SplachScreenActivity.utils.isNetworkConnected(getActivity())) {
+
+            String url = Utils.MAIN_HOST + "album.php";
+
+            RequestParams params = new RequestParams();
+            params.put("user_id",SplachScreenActivity.userItem.getUserID());
+
+
+            System.out.println(TAG + "url : " + url);
+            System.out.println(TAG + "param : " + params.toString());
+
+            if (!progressDialog.isShowing()) progressDialog.show();
+
+            Utils.client.post(url, params, new JsonHttpResponseHandler() {
+
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                    super.onSuccess(statusCode, headers, response);
+                    if (progressDialog.isShowing()) progressDialog.dismiss();
+                    System.out.println(TAG + "LOGIN SUCCESS" + response.toString());
+                    arrayList.clear();
+
+                    for (int i = 0 ; i < response.length() ; i ++){
+
+                        try {
+                            UserImageItem b =new UserImageItem(response.getJSONObject(i));
+                            arrayList.add(b);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+
+
+
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                    super.onFailure(statusCode, headers, throwable, errorResponse);
+                    if (progressDialog.isShowing()) progressDialog.dismiss();
+                    SplachScreenActivity.utils.showToast("Сервертэй холбогдоход алдаа гарлаа");
+                }
+
+            });
+
+        } else {
+            SplachScreenActivity.utils.showNoInternetAlert(getActivity());
+        }
+
+    }
+
+
 
 }
