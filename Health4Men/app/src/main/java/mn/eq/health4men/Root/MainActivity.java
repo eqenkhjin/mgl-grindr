@@ -344,6 +344,9 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
             membersFragment = new MembersFragment();
 
             fragment = membersFragment;
+
+            msgButton.setVisibility(View.VISIBLE);
+            done.setVisibility(View.GONE);
         }
 
         if (position == 1) {
@@ -351,6 +354,8 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
 
             fragment = new MyAlbum();
 
+            msgButton.setVisibility(View.GONE);
+            done.setVisibility(View.GONE);
         }
 
         if (position == 2) {
@@ -360,10 +365,14 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
             profileEditFragment.mainActivity = mainActivity;
             fragment = profileEditFragment;
 
+            msgButton.setVisibility(View.GONE);
+            done.setVisibility(View.VISIBLE);
+
         }
 
         if (position == 3) {
 
+            msgButton.setVisibility(View.GONE);
             logout(2);
 
         } else {
@@ -400,7 +409,6 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
             params.put("height", SplachScreenActivity.userItem.getUserHeight());
             params.put("weight", SplachScreenActivity.userItem.getUserWeight());
             params.put("country", SplachScreenActivity.userItem.getUserCountry());
-//            params.put("body_type", SplachScreenActivity.userItem.getUserBodyType());
             params.put("looking_for", SplachScreenActivity.userItem.getUserLookingFor());
             params.put("relationship_status", SplachScreenActivity.userItem.getUserRelationshipStatus());
             params.put("about_me", SplachScreenActivity.userItem.getUserAboutme());

@@ -127,17 +127,13 @@ public class PopUpFragment extends Fragment {
             arrayList.add("Indian");
         }
         if (popUpType == 5){
-            arrayList.add("Thin");
-            arrayList.add("Fast");
-            arrayList.add("Normal");
+            arrayList.add("Top");
+            arrayList.add("Bottom");
+            arrayList.add("Versality");
         }
         if (popUpType == 6){
             arrayList.add("Men");
             arrayList.add("Women");
-        }
-        if (popUpType == 7){
-            arrayList.add("Single");
-            arrayList.add("Married");
         }
     }
 

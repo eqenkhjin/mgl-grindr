@@ -55,9 +55,9 @@ public class ProfileEditFragment extends Fragment {
     private UserItem userItem;
     private static final String GOOD_ITEM_KEY = "userItem";
     public MainActivity mainActivity;
-    private FrameLayout ageFrame, heightFrame, weightFrame, ethnicityFrame, bodyTypeFrame, lookingForFrame, relationFrame;
+    private FrameLayout ageFrame, heightFrame, weightFrame, ethnicityFrame, bodyTypeFrame, lookingForFrame;
     public ProfileEditFragment profileEditFragment;
-    private TextView ageTextView, heightTextView, weightTextView, ethnicityTextView, bodyTypeTextView, lookingForTextView, relationTextView;
+    private TextView ageTextView, heightTextView, weightTextView, ethnicityTextView, bodyTypeTextView, lookingForTextView;
     public static EditText aboutUserEditText;
     public static EditText userNameEditText;
     private ImageView userImageView;
@@ -111,16 +111,12 @@ public class ProfileEditFragment extends Fragment {
         lookingForFrame = (FrameLayout) view.findViewById(R.id.lookingForFrame);
         lookingForFrame.setOnClickListener(onClick);
 
-        relationFrame = (FrameLayout) view.findViewById(R.id.relationFrame);
-        relationFrame.setOnClickListener(onClick);
-
         ageTextView = (TextView) view.findViewById(R.id.ageTextView);
         heightTextView = (TextView) view.findViewById(R.id.heightTextView);
         weightTextView = (TextView) view.findViewById(R.id.weightTextView);
         ethnicityTextView = (TextView) view.findViewById(R.id.ethnicityTextView);
         bodyTypeTextView = (TextView) view.findViewById(R.id.bodyTypeTextView);
         lookingForTextView = (TextView) view.findViewById(R.id.lookingForTextView);
-        relationTextView = (TextView) view.findViewById(R.id.relationTextView);
 
         userImageView = (ImageView) view.findViewById(R.id.userImageView);
         userImageView.setOnClickListener(new View.OnClickListener() {
@@ -143,7 +139,6 @@ public class ProfileEditFragment extends Fragment {
             if (v.getId() == R.id.ethnicityFrame) mainActivity.showPopUp(4, profileEditFragment);
             if (v.getId() == R.id.bodyTypeFrame) mainActivity.showPopUp(5, profileEditFragment);
             if (v.getId() == R.id.lookingForFrame) mainActivity.showPopUp(6, profileEditFragment);
-            if (v.getId() == R.id.relationFrame) mainActivity.showPopUp(7, profileEditFragment);
         }
     };
 
@@ -173,10 +168,6 @@ public class ProfileEditFragment extends Fragment {
             lookingForTextView.setText(text);
             SplachScreenActivity.userItem.setUserLookingFor(text);
         }
-        if (type == 7) {
-            relationTextView.setText(text);
-            SplachScreenActivity.userItem.setUserRelationshipStatus(text);
-        }
 
     }
 
@@ -189,7 +180,6 @@ public class ProfileEditFragment extends Fragment {
         ethnicityTextView.setText(SplachScreenActivity.userItem.getUserCountry());
 //        bodyTypeTextView.setText(SplachScreenActivity.userItem.getUserBodyType());
         lookingForTextView.setText(SplachScreenActivity.userItem.getUserLookingFor());
-        relationTextView.setText(SplachScreenActivity.userItem.getUserRelationshipStatus());
     }
 
     public Uri getOutputMediaFileUri(int type) {

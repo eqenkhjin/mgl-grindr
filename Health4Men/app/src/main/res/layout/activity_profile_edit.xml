@@ -191,7 +191,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="#bbbbbb"
-                    android:text="ethnicity"
+                    android:text="location"
                     android:textSize="16sp"/>
 
                 <TextView
@@ -224,7 +224,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="#bbbbbb"
-                    android:text="body type"
+                    android:text="role"
                     android:textSize="16sp"/>
 
                 <TextView
@@ -272,45 +272,6 @@
                     android:layout_gravity="right"/>
 
             </FrameLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#bbbbbb"
-                android:layout_gravity="bottom"/>
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/relationFrame"
-                android:paddingTop="16dp"
-                android:paddingBottom="16dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="#bbbbbb"
-                    android:text="relation status"
-                    android:textSize="16sp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/relationTextView"
-                    android:textColor="#434343"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:text="single"
-                    android:layout_marginRight="16dp"
-                    android:layout_gravity="right"/>
-
-            </FrameLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#bbbbbb"
-                android:layout_gravity="bottom"/>
 
         </LinearLayout>
         

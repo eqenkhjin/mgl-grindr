@@ -33,13 +33,6 @@ public class LoginActivity extends RootActivity {
     private static String TAG = "Login Activity : ";
     private EditText emailEditText;
     private EditText passwordEditText;
-    private TextView registerTextView;
-    public static String firstName;
-    public static String lastName;
-    public static String newCount;
-    public static String saleCount;
-    public static String priceUpCount;
-    public static String uramshuulalCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,14 +55,6 @@ public class LoginActivity extends RootActivity {
             }
         });
 
-        registerTextView = (TextView) findViewById(R.id.registerTextView);
-        registerTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                startActivity(intent);
-            }
-        });
     }
 
     private void loginToServer() {
@@ -81,7 +66,6 @@ public class LoginActivity extends RootActivity {
             RequestParams params = new RequestParams();
             params.put("email", emailEditText.getText().toString());
             params.put("password", passwordEditText.getText().toString());
-
 
             System.out.println(TAG + "url : " + url);
             System.out.println(TAG + "param : " + params.toString());
