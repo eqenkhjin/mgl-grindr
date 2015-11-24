@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,6 +28,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import mn.eq.health4men.Adapters.AdapterMembers;
+import mn.eq.health4men.Members.LibraryFragment;
 import mn.eq.health4men.Members.NewUserDetailActivity;
 import mn.eq.health4men.Objects.UserImageItem;
 import mn.eq.health4men.Objects.UserItem;
@@ -48,7 +51,9 @@ public class MyAlbum extends Fragment {
     private LinearLayoutManager mLayoutManager;
     private AdapterAlbum adapterAlbum;
     private static String TAG = "MyAlbum fragment : ";
-    public static ArrayList<UserImageItem> arrayList = new ArrayList<>();
+    private  ArrayList<UserImageItem> arrayList = new ArrayList<>();
+    private FragmentManager fragmentManager;
+    private LibraryFragment libraryFragment;
 
 
     @Override
@@ -59,10 +64,12 @@ public class MyAlbum extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_album, container, false);
+        fragmentManager = getActivity().getSupportFragmentManager();
         progressDialog = new Utils().getProgressDialog(getActivity(), "Getting photos");
         getPhotos();
 
         createInterface();
+
         return view;
     }
     private void createInterface(){
@@ -103,6 +110,7 @@ public class MyAlbum extends Fragment {
 
                     }
                 })
+
         );
 
         addPhoto.setOnClickListener(new View.OnClickListener() {
@@ -119,6 +127,15 @@ public class MyAlbum extends Fragment {
         });
 
     }
+//    public void showLibrary(int position) {
+//        FragmentTransaction fragmentTransac = fragmentManager.beginTransaction();
+//        libraryFragment = LibraryFragment.newInstance();
+//        libraryFragment.userItem = userItem;
+//        libraryFragment.currentPosition = position;
+//        fragmentTransac.add(R.id.container, libraryFragment);
+//        fragmentTransac.commit();
+//        popUpShowed = true;
+//    }
     public void getPhotos() {
 
 //        if (!canContinue)return;
@@ -155,7 +172,7 @@ public class MyAlbum extends Fragment {
                         }
 
                     }
-
+                    adapterAlbum.notifyDataSetChanged();
 
 
                 }

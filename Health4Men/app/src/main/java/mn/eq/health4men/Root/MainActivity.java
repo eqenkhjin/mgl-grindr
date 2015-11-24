@@ -324,12 +324,18 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
         if (position == lastSelectedIndex) return;
         if (position != 6) lastSelectedIndex = position;
 
-        if (position == 2) {
+        if (position == 2 ) {
             whiteStar.setVisibility(View.GONE);
             done.setVisibility(View.VISIBLE);
-        } else {
+        }
+        if(position==0){
             whiteStar.setVisibility(View.VISIBLE);
             done.setVisibility(View.GONE);
+            searchButton.setVisibility(View.VISIBLE);
+        }
+        if(position == 1){
+            whiteStar.setVisibility(View.GONE);
+            searchButton.setVisibility(View.GONE);
         }
 
         if (position == 0) {
