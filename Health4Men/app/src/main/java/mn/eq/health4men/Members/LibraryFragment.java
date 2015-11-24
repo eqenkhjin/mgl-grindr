@@ -14,9 +14,7 @@ import mn.eq.health4men.Chat.ChatActivity;
 import mn.eq.health4men.Objects.UserItem;
 import mn.eq.health4men.R;
 
-/**
- * Created by eQ on 11/23/15.
- */
+
 public class LibraryFragment extends Fragment {
 
     private View view;
@@ -47,6 +45,7 @@ public class LibraryFragment extends Fragment {
     }
 
     private void createInterface(){
+
         viewPager = (ViewPager) view.findViewById(R.id.viewPager);
         libraryAdapter = new LibraryAdapter(getActivity().getSupportFragmentManager(),userItem
                 .getAlbum(),libraryFragment);

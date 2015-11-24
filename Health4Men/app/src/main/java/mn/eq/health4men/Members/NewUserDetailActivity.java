@@ -38,9 +38,7 @@ import mn.eq.health4men.R;
 import mn.eq.health4men.Root.MainActivity;
 import mn.eq.health4men.Utils.RecyclerItemClickListener;
 
-/**
- * Created by Tamir on 11/21/2015.
- */
+
 public class NewUserDetailActivity extends FragmentActivity {
 
     private TextView userAboutMe;
