@@ -16,6 +16,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.Menu;
@@ -71,8 +73,9 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
     private ImageButton menuIcon;
     private LinearLayout done;
     private boolean popUpShowed;
-    private static String TAG = "Profile Edit : ";
+    private static String TAG = "MAIN ACTIVITY : ";
     private ProgressDialog progressDialog;
+    private ProgressDialog logOutDialog;
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 1000;
     private GoogleApiClient mGoogleApiClient;
     private MembersFragment membersFragment;
@@ -118,7 +121,8 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
     }
 
     private void createInterface() {
-        progressDialog = new Utils().getProgressDialog(this, "Нэвтэрч байна");
+        progressDialog = new Utils().getProgressDialog(this, "Logging in");
+        logOutDialog = new Utils().getProgressDialog(this,"Logging out");
 
         toolbar = (FrameLayout) findViewById(R.id.toolbar);
 
@@ -156,22 +160,41 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
             @Override
             public void onClick(View v) {
                 if (!isSearchEnabled){
-
-                    toolbarLayout.setVisibility(View.GONE);
-                    searchEditText.setVisibility(View.VISIBLE);
-                    isSearchEnabled = !isSearchEnabled;
-
+                    showSearch();
                 }else {
-
-                    toolbarLayout.setVisibility(View.VISIBLE);
-                    searchEditText.setVisibility(View.GONE);
-                    isSearchEnabled = !isSearchEnabled;
-
+                    showMenu();
                 }
             }
         });
 
         searchEditText = (EditText) findViewById(R.id.searchEditText);
+
+        searchEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                MembersFragment.searchArrayList.clear();
+
+                for (UserItem userItem : MembersFragment.arrayList){
+                    if (userItem.getUserName().toLowerCase().contains(s.toString().toLowerCase())){
+                        MembersFragment.searchArrayList.add(userItem);
+                    }
+                }
+                MembersFragment.adapterMembers.notifyDataSetChanged();
+
+            }
+        });
+
         toolbarLayout = (LinearLayout) findViewById(R.id.toolbarLayout);
 
         displayView(0);
@@ -185,8 +208,21 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
 
     }
 
+    public void showMenu(){
+        searchEditText.setText("");
+        toolbarLayout.setVisibility(View.VISIBLE);
+        searchEditText.setVisibility(View.GONE);
+        isSearchEnabled = !isSearchEnabled;
+    }
+
+    public void showSearch(){
+        toolbarLayout.setVisibility(View.GONE);
+        searchEditText.setVisibility(View.VISIBLE);
+        isSearchEnabled = !isSearchEnabled;
+    }
+
     private void isOnlineRequest() {
-        isOnlineTimer = new CountDownTimer(2500000, 5000) {
+        isOnlineTimer = new CountDownTimer(25000000, 5000) {
             @Override
             public void onTick(long l) {
 
@@ -201,6 +237,8 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
                 this.cancel();
             }
         };
+
+        isOnlineTimer.start();
     }
 
     private void isOnlineRequestToServer() {
@@ -252,10 +290,14 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
     }
 
     private void changeIsOnline(IsOnline isOnline) {
+        System.out.println(TAG + "CHANGE IS ONLINE");
 
         for (UserItem userItem : MembersFragment.arrayList) {
 
             if (userItem.getUserID() == isOnline.getUserID()) {
+
+                System.out.println(TAG + userItem.getUserName());
+
                 userItem.setMemberOnline(isOnline.isOnline());
                 return;
             }
@@ -271,6 +313,11 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
 
     public void displayView(int position) {
         Fragment fragment = null;
+        try {
+            showMenu();
+        }catch (Exception e){
+
+        }
 
         String title = getString(R.string.app_name);
 
@@ -311,10 +358,7 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
 
         if (position == 3) {
 
-            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-            startActivity(intent);
-
-            finish();
+            logout(2);
 
         } else {
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -459,16 +503,14 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
     public void onBackPressed() {
 
         if (isSearchEnabled){
-            toolbarLayout.setVisibility(View.VISIBLE);
-            searchEditText.setVisibility(View.GONE);
-            isSearchEnabled = !isSearchEnabled;
+            showMenu();
         }else {
             new AlertDialog.Builder(this)
                     .setTitle(getString(R.string.app_name_mn))
                     .setMessage(getString(R.string.quit))
                     .setPositiveButton("Quit", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            finish();
+                            logout(1);
                         }
                     })
                     .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -482,4 +524,158 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
 
     }
 
+    public void logout(final int type){
+
+        if (SplachScreenActivity.utils.isNetworkConnected(this)) {
+
+            String url = Utils.MAIN_HOST + "mobile_online.php";
+
+            RequestParams params = new RequestParams();
+            params.put("id",SplachScreenActivity.userItem.getUserID());
+            params.put("is_online", 0);
+
+            System.out.println("LOG OUT : URL ->" + url);
+            System.out.println("LOG OUT : PARAMS ->"+params);
+
+            if (!logOutDialog.isShowing()) logOutDialog.show();
+
+            Utils.client.post(url,params, new JsonHttpResponseHandler() {
+
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    super.onSuccess(statusCode, headers, response);
+                    if (logOutDialog.isShowing()) logOutDialog.dismiss();
+                    if (type == 1)finish();
+                    if (type == 2){
+                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                        startActivity(intent);
+
+                        finish();
+                    }
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    super.onFailure(statusCode, headers, throwable, errorResponse);
+                    if (logOutDialog.isShowing()) logOutDialog.dismiss();
+                    if (type == 1)finish();
+                    if (type == 2){
+                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                        startActivity(intent);
+
+                        finish();
+                    }
+                }
+            });
+        }else {
+            if (logOutDialog.isShowing()) logOutDialog.dismiss();
+            if (type == 1)finish();
+            if (type == 2){
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);
+
+                finish();
+            }
+        }
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        System.out.println("ON DESTROY");
+
+        if (SplachScreenActivity.utils.isNetworkConnected(this)) {
+
+            String url = Utils.MAIN_HOST + "mobile_online.php";
+
+            RequestParams params = new RequestParams();
+            params.put("id",SplachScreenActivity.userItem.getUserID());
+            params.put("is_online", 0);
+
+            System.out.println("LOG OUT : URL ->" + url);
+            System.out.println("LOG OUT : PARAMS ->"+params);
+
+            Utils.client.post(url,params, new JsonHttpResponseHandler() {
+
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    super.onSuccess(statusCode, headers, response);
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    super.onFailure(statusCode, headers, throwable, errorResponse);
+                }
+            });
+        }else {
+
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        System.out.println("ON STOP");
+
+        if (SplachScreenActivity.utils.isNetworkConnected(this)) {
+
+            String url = Utils.MAIN_HOST + "mobile_online.php";
+
+            RequestParams params = new RequestParams();
+            params.put("id",SplachScreenActivity.userItem.getUserID());
+            params.put("is_online", 0);
+
+            System.out.println("LOG OUT : URL ->" + url);
+            System.out.println("LOG OUT : PARAMS ->"+params);
+
+            Utils.client.post(url,params, new JsonHttpResponseHandler() {
+
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    super.onSuccess(statusCode, headers, response);
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    super.onFailure(statusCode, headers, throwable, errorResponse);
+                }
+            });
+        }else {
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (SplachScreenActivity.utils.isNetworkConnected(this)) {
+
+            String url = Utils.MAIN_HOST + "mobile_online.php";
+
+            RequestParams params = new RequestParams();
+            params.put("id",SplachScreenActivity.userItem.getUserID());
+            params.put("is_online", 1);
+
+            System.out.println("LOG OUT : URL ->" + url);
+            System.out.println("LOG OUT : PARAMS ->"+params);
+
+            Utils.client.post(url,params, new JsonHttpResponseHandler() {
+
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    super.onSuccess(statusCode, headers, response);
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    super.onFailure(statusCode, headers, throwable, errorResponse);
+                }
+            });
+        }else {
+
+        }
+    }
 }

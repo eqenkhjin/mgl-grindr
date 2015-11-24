@@ -49,6 +49,7 @@ public class MembersFragment extends Fragment {
     private static String TAG = "Members Fragment : ";
     private ProgressDialog progressDialog;
     public static ArrayList<UserItem> arrayList = new ArrayList<>();
+    public static ArrayList<UserItem> searchArrayList = new ArrayList<>();
     public MembersFragment membersFragment;
     public boolean isWaitResponse;
     public boolean canContinue = true;
@@ -131,11 +132,11 @@ public class MembersFragment extends Fragment {
             recyclerView.setLayoutManager(mLayoutManager);
         } else {
             recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
-//           recyclerView.setLayoutManager(new StaggeredGridLayoutManager(4,StaggeredGridLayoutManager.VERTICAL));
         }
-        adapterMembers = new AdapterMembers(getActivity(), arrayList,isList);
+        adapterMembers = new AdapterMembers(getActivity(), searchArrayList,isList);
         adapterMembers.membersFragment = membersFragment;
         recyclerView.setAdapter(adapterMembers);
+
     }
 
     public void getMembers() {
@@ -170,6 +171,8 @@ public class MembersFragment extends Fragment {
                         try {
                             UserItem b =new UserItem(response.getJSONObject(i));
                             arrayList.add(b);
+                            searchArrayList.add(b);
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

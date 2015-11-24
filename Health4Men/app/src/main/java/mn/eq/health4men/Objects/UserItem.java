@@ -38,6 +38,7 @@ public class UserItem implements Serializable {
     private String userRole;
     private boolean memberOnline;
     private ArrayList<UserImageItem> album = new ArrayList<>();
+    private boolean canShow = true;
 
     private String noInformation = "no information";
 
@@ -303,5 +304,13 @@ public class UserItem implements Serializable {
 
     public void setNoInformation(String noInformation) {
         this.noInformation = noInformation;
+    }
+
+    public boolean isCanShow() {
+        return canShow;
+    }
+
+    public void setCanShow(boolean canShow) {
+        this.canShow = canShow;
     }
 }

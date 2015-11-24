@@ -22,7 +22,7 @@ public class UserImageItem implements Serializable {
         else this.canShow = false;
 
         this.imageURL = object.getString("picture");
-        this.imageId = object.getInt("imageId");
+        this.imageId = object.getInt("id");
     }
 
     public String getImageURL() {
