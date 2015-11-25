@@ -29,7 +29,7 @@ public class UserItem implements Serializable {
     private String userRelationshipStatus;
     private String userAboutme;
     private String userLocation;
-//    private String userBodyType;
+    private String userBodyType;
     private String userLookingFor;
     private String userCoordinateX;
     private String userCooordinateY;
@@ -87,6 +87,8 @@ public class UserItem implements Serializable {
             if (object.getString("is_online").equalsIgnoreCase("0"))this.memberOnline = false;
         }
 
+        this.userBodyType = object.getString("role");
+
         if (MainActivity.mLastLocation == null){
             distanceBetweenMe = "Can't find location.";
         }else {
@@ -108,6 +110,7 @@ public class UserItem implements Serializable {
             }else {
                 distanceBetweenMe = "No information user location";
             }
+
         }
 
         if (object.has("album")){
@@ -312,5 +315,13 @@ public class UserItem implements Serializable {
 
     public void setCanShow(boolean canShow) {
         this.canShow = canShow;
+    }
+
+    public String getUserBodyType() {
+        return userBodyType;
+    }
+
+    public void setUserBodyType(String userBodyType) {
+        this.userBodyType = userBodyType;
     }
 }

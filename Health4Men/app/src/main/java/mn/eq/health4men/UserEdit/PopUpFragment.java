@@ -122,9 +122,28 @@ public class PopUpFragment extends Fragment {
             }
         }
         if (popUpType == 4){
-            arrayList.add("Asian");
-            arrayList.add("European");
-            arrayList.add("Indian");
+            arrayList.add("UB");
+            arrayList.add("Arkhangai");
+            arrayList.add("Bayan-Ulgii");
+            arrayList.add("Bayan-Khongor");
+            arrayList.add("Bulgan");
+            arrayList.add("Govi-Altai");
+            arrayList.add("Govi-Sumber");
+            arrayList.add("Darhan-Uul");
+            arrayList.add("Dorno Gobi");
+            arrayList.add("Dornod");
+            arrayList.add("Dund-Govi");
+            arrayList.add("Zavhan");
+            arrayList.add("Orhon");
+            arrayList.add("Ovor Hangai");
+            arrayList.add("Omno Gobi");
+            arrayList.add("Sukhbaatar");
+            arrayList.add("Selenge");
+            arrayList.add("Tuv");
+            arrayList.add("Uvs");
+            arrayList.add("Hovd");
+            arrayList.add("Hovsgol");
+            arrayList.add("Hentii");
         }
         if (popUpType == 5){
             arrayList.add("Top");
@@ -132,8 +151,9 @@ public class PopUpFragment extends Fragment {
             arrayList.add("Versality");
         }
         if (popUpType == 6){
-            arrayList.add("Men");
-            arrayList.add("Women");
+            arrayList.add("Sex");
+            arrayList.add("Chat");
+            arrayList.add("Make Friends");
         }
     }
 

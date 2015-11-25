@@ -39,9 +39,16 @@ import com.loopj.android.http.RequestParams;
 
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 //import org.json.JSONObject;
 
 //import org.apache.http.client.ClientProtocolException;
@@ -143,8 +150,7 @@ public class ChatActivity extends FragmentActivity {
 
         if (SplachScreenActivity.utils.isNetworkConnected(this)) {
 
-
-//            new UploadFileToServer().execute();
+            new UploadFileToServer().execute();
             return;
 
         } else {
@@ -487,98 +493,98 @@ public class ChatActivity extends FragmentActivity {
 
     }
 
-//    private class UploadFileToServer extends AsyncTask<Void, Integer, String> {
-//        @Override
-//        protected void onPreExecute() {
-//            // setting progress bar to zero
-//            super.onPreExecute();
-//        }
-//
-//        @Override
-//        protected void onProgressUpdate(Integer... progress) {
-//        }
-//
-//        @Override
-//        protected String doInBackground(Void... params) {
-//            return uploadFile();
-//        }
-//
-//        @SuppressWarnings("deprecation")
-//        private String uploadFile() {
-//            String responseString = null;
-//
-//            HttpClient httpclient = new DefaultHttpClient();
-//            HttpPost httppost = new HttpPost(Utils.MAIN_HOST + "chat_add.php");
-//
-//            try {
-//                AndroidMultiPartEntity entity = new AndroidMultiPartEntity(
-//                        new AndroidMultiPartEntity.ProgressListener() {
-//
-//                            @Override
-//                            public void transferred(long num) {
-//                            }
-//                        });
-//
-//                File sourceFile = new File(imageURL);
-//
-//                entity.addPart("picture", new FileBody(sourceFile));
-//
-//                entity.addPart("from_user", new StringBody(SplachScreenActivity.userItem
-//                        .getUserID()+""));
-//                entity.addPart("to_user", new StringBody(userItem.getUserID()+""));
-//                entity.addPart("text", new StringBody(message.getText().toString()));
-//
-//
-//                httppost.setEntity(entity);
-//
-//                HttpResponse response = httpclient.execute(httppost);
-//                HttpEntity r_entity = response.getEntity();
-//
-//                int statusCode = response.getStatusLine().getStatusCode();
-//                if (statusCode == 200) {
-//                    responseString = EntityUtils.toString(r_entity);
-//                } else {
-//                    responseString = "Error occurred! Http Status Code: "
-//                            + statusCode;
-//                }
-//
-//            } catch (ClientProtocolException e) {
-//                responseString = e.toString();
-//                SplachScreenActivity.utils.showToast("Сервертэй холбогдоход алдаа гарлаа");
-//            } catch (IOException e) {
-//                responseString = e.toString();
-//                SplachScreenActivity.utils.showToast("Сервертэй холбогдоход алдаа гарлаа");
-//            }
-//
-//            return responseString;
-//
-//        }
-//
-//        @Override
-//        protected void onPostExecute(String result) {
-//
-//            JSONObject response = null;
-//            try {
-//                response = new JSONObject(result);
-//
-//                if (response.getInt("success") == 1) {
-//                    message.setText("");
-//                    addImageView.setImageResource(R.drawable.image);
-//                } else {
-//                    SplachScreenActivity.utils.showToast("Сервертэй холбогдоход алдаа гарлаа");
-//                }
-//
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//                SplachScreenActivity.utils.showToast("Сервертэй холбогдоход алдаа гарлаа");
-//
-//            }
-//
-//
-//            super.onPostExecute(result);
-//        }
-//
-//    }
+    private class UploadFileToServer extends AsyncTask<Void, Integer, String> {
+        @Override
+        protected void onPreExecute() {
+            // setting progress bar to zero
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... progress) {
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            return uploadFile();
+        }
+
+        @SuppressWarnings("deprecation")
+        private String uploadFile() {
+            String responseString = null;
+
+            HttpClient httpclient = new DefaultHttpClient();
+            HttpPost httppost = new HttpPost(Utils.MAIN_HOST + "chat_add.php");
+
+            try {
+                AndroidMultiPartEntity entity = new AndroidMultiPartEntity(
+                        new AndroidMultiPartEntity.ProgressListener() {
+
+                            @Override
+                            public void transferred(long num) {
+                            }
+                        });
+
+                File sourceFile = new File(imageURL);
+
+                entity.addPart("picture", new FileBody(sourceFile));
+
+                entity.addPart("from_user", new StringBody(SplachScreenActivity.userItem
+                        .getUserID()+""));
+                entity.addPart("to_user", new StringBody(userItem.getUserID()+""));
+                entity.addPart("text", new StringBody(message.getText().toString()));
+
+
+                httppost.setEntity(entity);
+
+                HttpResponse response = httpclient.execute(httppost);
+                HttpEntity r_entity = response.getEntity();
+
+                int statusCode = response.getStatusLine().getStatusCode();
+                if (statusCode == 200) {
+                    responseString = EntityUtils.toString(r_entity);
+                } else {
+                    responseString = "Error occurred! Http Status Code: "
+                            + statusCode;
+                }
+
+            } catch (ClientProtocolException e) {
+                responseString = e.toString();
+                SplachScreenActivity.utils.showToast("Сервертэй холбогдоход алдаа гарлаа");
+            } catch (IOException e) {
+                responseString = e.toString();
+                SplachScreenActivity.utils.showToast("Сервертэй холбогдоход алдаа гарлаа");
+            }
+
+            return responseString;
+
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+            JSONObject response = null;
+            try {
+                response = new JSONObject(result);
+
+                if (response.getInt("success") == 1) {
+                    message.setText("");
+                    addImageView.setImageResource(R.drawable.image);
+                } else {
+                    SplachScreenActivity.utils.showToast("Сервертэй холбогдоход алдаа гарлаа");
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+                SplachScreenActivity.utils.showToast("Сервертэй холбогдоход алдаа гарлаа");
+
+            }
+
+
+            super.onPostExecute(result);
+        }
+
+    }
 
     public void showBigImage(String imageURL){
         FragmentTransaction fragmentTransac = fragmentManager.beginTransaction();

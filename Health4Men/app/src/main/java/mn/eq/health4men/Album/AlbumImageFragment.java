@@ -69,6 +69,7 @@ public class AlbumImageFragment extends Fragment {
         } else {
             permission.setText("private");
         }
+
         permission.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

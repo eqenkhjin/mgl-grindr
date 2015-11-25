@@ -19,6 +19,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import mn.eq.health4men.Chat.ImageFragment;
 import mn.eq.health4men.Members.MembersFragment;
 import mn.eq.health4men.Objects.UserImageItem;
 import mn.eq.health4men.Objects.UserItem;
@@ -37,8 +38,6 @@ public class AdapterMembers extends RecyclerView.Adapter<AdapterMembers.ViewHold
     private int lastPosition = -1;
     public MembersFragment membersFragment;
 
-
-
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public RoundedImageView memberImageView;
@@ -47,6 +46,7 @@ public class AdapterMembers extends RecyclerView.Adapter<AdapterMembers.ViewHold
         public LinearLayout backLayout;
         public ImageView memberImage;
         public View view;
+        public ImageView userRole;
 
         public ViewHolder(View v) {
             super(v);
@@ -63,8 +63,8 @@ public class AdapterMembers extends RecyclerView.Adapter<AdapterMembers.ViewHold
                 memberImage = (ImageView) v.findViewById(R.id.row_columned_image);
                 memberNameTextView = (TextView) v.findViewById(R.id.row_columned_text);
                 view = v.findViewById(R.id.onlineView);
+                userRole = (ImageView) v.findViewById(R.id.userRole);
             }
-
         }
     }
 
@@ -132,6 +132,15 @@ public class AdapterMembers extends RecyclerView.Adapter<AdapterMembers.ViewHold
             if (memberItem.isMemberOnline())
                 holder.view.setBackgroundResource(R.drawable.border_online);
             else holder.view.setBackgroundResource(R.drawable.border_offline);
+
+            if (memberItem.getUserBodyType().equalsIgnoreCase("Top")){
+                holder.userRole.setImageResource(R.drawable.icon_t);
+            }if (memberItem.getUserBodyType().equalsIgnoreCase("Bottom")){
+                holder.userRole.setImageResource(R.drawable.icon_b);
+            }if (memberItem.getUserBodyType().equalsIgnoreCase("Versality")){
+                holder.userRole.setImageResource(R.drawable.icon_v);
+            }
+
             holder.memberNameTextView.setText(memberItem.getDistanceBetweenMe());
         }
 

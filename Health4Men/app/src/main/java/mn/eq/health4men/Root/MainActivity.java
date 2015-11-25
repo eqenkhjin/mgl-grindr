@@ -412,6 +412,7 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
             params.put("looking_for", SplachScreenActivity.userItem.getUserLookingFor());
             params.put("relationship_status", SplachScreenActivity.userItem.getUserRelationshipStatus());
             params.put("about_me", SplachScreenActivity.userItem.getUserAboutme());
+            params.put("role",SplachScreenActivity.userItem.getUserBodyType());
 
             System.out.println(TAG + "url : " + url);
             System.out.println(TAG + "param : " + params.toString());
@@ -433,11 +434,22 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
                             if (response.getInt("success") == 0) {
                                 SplachScreenActivity.utils.showAlert(MainActivity.this, response.getString("message"));
                             } else {
-                                SplachScreenActivity.utils.showAlert(MainActivity.this, "Мэдээллийг амжилттай илгээлээ");
+                                SplachScreenActivity.utils.showAlert(MainActivity.this,
+                                        "Information succesfully sent");
 
                                 FragmentDrawer.userNameTextView.setText(SplachScreenActivity.userItem.getUserName());
                                 FragmentDrawer.userEmailTextView.setText(SplachScreenActivity.userItem.getUserEmail());
-                                Picasso.with(MainActivity.this).load(SplachScreenActivity.userItem.getUserImageURL()).into(FragmentDrawer.userImageView);
+
+                                if (SplachScreenActivity.userItem.getUserImageURL().length() > 3){
+                                    Picasso.with(MainActivity.this).load(SplachScreenActivity
+                                            .userItem.getUserImageURL()).placeholder(R.drawable.placholder_member)
+                                            .into
+                                            (FragmentDrawer
+                                            .userImageView);
+                                }else {
+                                    FragmentDrawer.userImageView.setImageResource(R.drawable.placholder_member);
+                                }
+
 
                             }
                         } catch (JSONException e) {
