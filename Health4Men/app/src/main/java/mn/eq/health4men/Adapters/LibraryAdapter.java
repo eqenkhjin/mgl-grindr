@@ -40,7 +40,7 @@ public class LibraryAdapter extends FragmentStatePagerAdapter {
             return imageFragment;
         } else {
             UserImageItem userImageItem = arrayList.get(position);
-            AlbumImageFragment imageFragment = AlbumImageFragment.newInstance(userImageItem.getImageURL());
+            AlbumImageFragment imageFragment = AlbumImageFragment.newInstance(arrayList.get(position));
             imageFragment.libraryFragment = libraryFragment;
             return imageFragment;
         }

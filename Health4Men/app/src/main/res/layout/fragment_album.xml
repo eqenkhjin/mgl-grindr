@@ -7,24 +7,35 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycleView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_marginBottom="50dp"
+        android:background="#f5f5f5"/>
 
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
         android:orientation="horizontal"
         android:layout_gravity="bottom"
-        android:background="#80F2784B"
-        android:layout_height="50dp"
-        android:layout_width="match_parent">
+        android:weightSum="2">
 
-        <ImageButton
+        <Button
             android:id="@+id/addAlbum"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"/>
+            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:text="ADD"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
+            android:textColor="@android:color/white"/>
 
-        <ImageButton
+        <Button
             android:id="@+id/deleteAlbum"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"/>
+            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:text="REMOVE"
+            android:layout_weight="1"
+            android:background="#80F2784B"
+            android:textColor="@android:color/white"/>
 
     </LinearLayout>
+
 </FrameLayout>

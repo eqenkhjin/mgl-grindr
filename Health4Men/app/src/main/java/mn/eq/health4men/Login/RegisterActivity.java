@@ -20,6 +20,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import mn.eq.health4men.R;
+import mn.eq.health4men.Root.MainActivity;
 import mn.eq.health4men.Root.RootActivity;
 import mn.eq.health4men.Root.SplachScreenActivity;
 import mn.eq.health4men.Utils.Utils;
@@ -32,7 +33,6 @@ public class RegisterActivity extends RootActivity {
     private EditText emailEditText;
     private EditText passwordEditText;
     private EditText confirmPasswordEditText;
-    private EditText ageEditText;
 
     private Button loginButton;
 
@@ -70,7 +70,6 @@ public class RegisterActivity extends RootActivity {
         emailEditText = (EditText) findViewById(R.id.emailEditText);
         passwordEditText = (EditText) findViewById(R.id.passwordEditText);
         confirmPasswordEditText = (EditText) findViewById(R.id.confirmPasswordEditText);
-        ageEditText = (EditText) findViewById(R.id.ageEditText);
 
         loginButton = (Button) findViewById(R.id.loginButton);
 
@@ -78,8 +77,12 @@ public class RegisterActivity extends RootActivity {
             @Override
             public void onClick(View v) {
                 if (checkIsEmpty())
-                    if (isPasswordMatch())
-                        registerRequest();
+                    if (isEmailValid(emailEditText.getText().toString())){
+                        if (isPasswordMatch())
+                            registerRequest();
+                    }else {
+                        SplachScreenActivity.utils.showToast("Please type correct email");
+                    }
             }
         });
 
@@ -88,8 +91,7 @@ public class RegisterActivity extends RootActivity {
     private boolean checkIsEmpty() {
         if (emailEditText.getText().toString().length() == 0
                 || passwordEditText.getText().toString().length() == 0
-                || confirmPasswordEditText.getText().toString().length() == 0
-                || ageEditText.getText().toString().length() == 0) {
+                || confirmPasswordEditText.getText().toString().length() == 0) {
             SplachScreenActivity.utils.showToast("Please fill all fields");
             return false;
         }
@@ -97,8 +99,15 @@ public class RegisterActivity extends RootActivity {
     }
 
     private boolean isPasswordMatch() {
-        if (passwordEditText.getText().toString().equalsIgnoreCase(confirmPasswordEditText.getText().toString()))
+        if (passwordEditText.getText().toString().equalsIgnoreCase(confirmPasswordEditText.getText().toString())){
+            if (passwordEditText.getText().length() < 6){
+                SplachScreenActivity.utils.showToast("Password length is must be longer than 6 " +
+                        "character");
+                return false;
+            }
+
             return true;
+        }
         else{
             SplachScreenActivity.utils.showToast("Password didn't match");
             return false;
@@ -114,7 +123,6 @@ public class RegisterActivity extends RootActivity {
             RequestParams params = new RequestParams();
             params.put("email", emailEditText.getText().toString());
             params.put("password", passwordEditText.getText().toString());
-            params.put("age","29");
 
 
             System.out.println(TAG + "url : " + url);
@@ -137,7 +145,8 @@ public class RegisterActivity extends RootActivity {
                             if (response.getInt("success") == 0){
                                 SplachScreenActivity.utils.showAlert(RegisterActivity.this,response.getString("message"));
                             }else {
-                                SplachScreenActivity.utils.showToast(response.getString("message"));
+                                SplachScreenActivity.utils.showToast("Registration is succesfully" +
+                                        " done");
                                 finish();
                             }
                         } catch (JSONException e) {
@@ -159,4 +168,9 @@ public class RegisterActivity extends RootActivity {
         }
 
     }
+
+    boolean isEmailValid(CharSequence email) {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
+
 }

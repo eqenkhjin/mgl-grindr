@@ -1,16 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
-    <RelativeLayout
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <FrameLayout
         android:id="@+id/row_album_relative"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <ImageView
-            android:scaleType="centerCrop"
-            android:id="@+id/row_album_img"
-            android:layout_height="match_parent"
-            android:layout_width="match_parent"/>
+        android:layout_height="wrap_content"
+        android:padding="4dp">
 
-    </RelativeLayout>
+        <ImageView
+            android:id="@+id/row_album_img"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"/>
+
+        <CheckBox
+            android:id="@+id/good_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|top"
+            android:button="@drawable/checkbox_selector1"
+            android:padding="6dp"
+            android:visibility="gone"/>
+
+    </FrameLayout>
 
 </LinearLayout>

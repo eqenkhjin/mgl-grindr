@@ -58,8 +58,8 @@ public class FragmentDrawer extends Fragment {
         List<NavDrawerItem> data = new ArrayList<>();
 
         data.add(new NavDrawerItem("Members",R.drawable.members));
-        data.add(new NavDrawerItem("Gallery",R.drawable.library));
-        data.add(new NavDrawerItem("Profile edit",R.drawable.icon_edit));
+        data.add(new NavDrawerItem("My Photos",R.drawable.library));
+        data.add(new NavDrawerItem("Edit profile",R.drawable.icon_edit));
         data.add(new NavDrawerItem("Log out",R.drawable.logout));
 
         return data;

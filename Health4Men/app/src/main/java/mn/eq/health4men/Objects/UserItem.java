@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import mn.eq.health4men.Login.LoginActivity;
 import mn.eq.health4men.Root.MainActivity;
 import mn.eq.health4men.Root.SplachScreenActivity;
 
@@ -39,20 +40,20 @@ public class UserItem implements Serializable {
     private boolean memberOnline;
     private ArrayList<UserImageItem> album = new ArrayList<>();
     private boolean canShow = true;
-
-    private String noInformation = "no information";
+    private int beforeChat = 0;
+    private String noInformation = "";
 
     public UserItem(JSONObject object) throws JSONException {
 
         this.userID = object.getInt("id");
 
-        if (checkIsEmpty(object.getString("user_nicename")))this.userName = noInformation;
+        if (checkIsEmpty(object.getString("user_nicename")))this.userName = "";
         else this.userName = object.getString("user_nicename");
 
         if (checkIsEmpty(object.getString("user_registered")))this.userRegisterDate = noInformation;
         else this.userRegisterDate = object.getString("user_registered");
 
-        if (checkIsEmpty(object.getString("display_name")))this.userDisplayName = noInformation;
+        if (checkIsEmpty(object.getString("display_name")))this.userDisplayName = "";
         else this.userDisplayName = object.getString("display_name");
 
         this.userImageURL = object.getString("profile_url");
@@ -73,7 +74,7 @@ public class UserItem implements Serializable {
         if (checkIsEmpty(object.getString("relationship_status")))this.userRelationshipStatus = noInformation;
         else this.userRelationshipStatus = object.getString("relationship_status");
 
-        if (checkIsEmpty(object.getString("about_me")))this.userAboutme = noInformation;
+        if (checkIsEmpty(object.getString("about_me")))this.userAboutme = "";
         else this.userAboutme = object.getString("about_me");
 
         if (checkIsEmpty(object.getString("looking_for")))this.userLookingFor = noInformation;
@@ -89,7 +90,7 @@ public class UserItem implements Serializable {
 
         this.userBodyType = object.getString("role");
 
-        if (MainActivity.mLastLocation == null){
+        if (LoginActivity.mLastLocation == null){
             distanceBetweenMe = "Can't find location.";
         }else {
             if (this.userCoordinateX.length() > 3 && this.userCooordinateY.length() > 3){
@@ -97,7 +98,7 @@ public class UserItem implements Serializable {
                 loc2.setLatitude(Double.parseDouble(this.userCoordinateX));
                 loc2.setLongitude(Double.parseDouble(this.userCooordinateY));
 
-                float distanceInMeters = MainActivity.mLastLocation.distanceTo(loc2);
+                float distanceInMeters = LoginActivity.mLastLocation.distanceTo(loc2);
 
                 int distance = (int)distanceInMeters;
 
@@ -119,11 +120,20 @@ public class UserItem implements Serializable {
             if (array.length() > 0){
 
                 for (int i = 0 ; i < array.length() ; i ++){
-                    this.album.add(new UserImageItem(array.getJSONObject(i)));
+
+                    JSONObject object1 = array.getJSONObject(i);
+
+                    if (object1.getInt("type") == 1){
+                        this.album.add(new UserImageItem(array.getJSONObject(i)));
+                    }
+
                 }
 
             }
 
+        }
+        if (object.has("beforechat")){
+            this.beforeChat = object.getInt("beforechat");
         }
     }
 
@@ -323,5 +333,13 @@ public class UserItem implements Serializable {
 
     public void setUserBodyType(String userBodyType) {
         this.userBodyType = userBodyType;
+    }
+
+    public int getBeforeChat() {
+        return beforeChat;
+    }
+
+    public void setBeforeChat(int beforeChat) {
+        this.beforeChat = beforeChat;
     }
 }

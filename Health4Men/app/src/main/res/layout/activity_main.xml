@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="16dp"
-            android:src="@android:drawable/ic_dialog_email">
+            android:src="@drawable/mesage">
 
         </android.support.design.widget.FloatingActionButton>
 

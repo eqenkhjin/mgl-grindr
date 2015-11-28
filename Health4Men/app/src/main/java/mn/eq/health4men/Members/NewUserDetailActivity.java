@@ -122,15 +122,9 @@ public class NewUserDetailActivity extends FragmentActivity {
             userHeight.setText(userItem.getUserHeight());
             userWeight.setText(userItem.getUserWeight());
             userLookingFor.setText(userItem.getUserLookingFor());
-            userRole.setText(userItem.getUserRole());
+            userRole.setText(userItem.getUserBodyType());
+            userLocation.setText(userItem.getUserCountry());
         }
-//        userAge.setText(", "+userItem.getUserAge());
-//        userDistance.setText(userItem.getDistanceBetweenMe());
-//        userHeight.setText(userItem.getUserHeight());
-//        System.out.println("HEIGHT : "+userItem.getUserHeight());
-//        userWeight.setText(userItem.getUserWeight());
-//        userName.setText(userItem.getUserName());
-//        userBodyType.setText(userItem.getUserBodyType());
 
     }
 

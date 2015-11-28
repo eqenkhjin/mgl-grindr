@@ -47,6 +47,7 @@ public class AdapterMembers extends RecyclerView.Adapter<AdapterMembers.ViewHold
         public ImageView memberImage;
         public View view;
         public ImageView userRole;
+        public ImageView messageImageView;
 
         public ViewHolder(View v) {
             super(v);
@@ -56,6 +57,7 @@ public class AdapterMembers extends RecyclerView.Adapter<AdapterMembers.ViewHold
                 memberDistanceTextView = (TextView) v.findViewById(R.id.memberDistanceTextView);
                 backLayout = (LinearLayout) v.findViewById(R.id.backLayout);
                 view = v.findViewById(R.id.onlineView);
+                messageImageView = (ImageView) v.findViewById(R.id.messageImageView);
             } else {
                 LinearLayout layout = (LinearLayout) v.findViewById(R.id.row_columned_linear);
                 layout.getLayoutParams().width = MainActivity.deviceWidth/3;
@@ -101,13 +103,6 @@ public class AdapterMembers extends RecyclerView.Adapter<AdapterMembers.ViewHold
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
 
-        if (position == mDataset.size() - 1){
-                if (!membersFragment.isWaitResponse){
-                    membersFragment.pageIndex = membersFragment.pageIndex + 1;
-                    membersFragment.getMembers();
-                }
-        }
-
         UserItem memberItem = mDataset.get(position);
         if(isList) {
             if (memberItem.getUserImageURL().length() > 3) {
@@ -123,6 +118,13 @@ public class AdapterMembers extends RecyclerView.Adapter<AdapterMembers.ViewHold
             else holder.view.setBackgroundResource(R.drawable.border_offline);
 
             holder.memberDistanceTextView.setText(memberItem.getDistanceBetweenMe());
+
+            if (memberItem.getBeforeChat() == 1){
+                holder.messageImageView.setImageResource(R.drawable.star_primary);
+            }else {
+                holder.messageImageView.setImageResource(R.drawable.star_gray);
+            }
+
         } else {
             if (memberItem.getUserImageURL().length() > 3) {
                 Picasso.with(context).load(memberItem.getUserImageURL()).into(holder.memberImage);

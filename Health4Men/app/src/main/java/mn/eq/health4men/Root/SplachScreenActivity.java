@@ -41,7 +41,6 @@ public class SplachScreenActivity extends RootActivity {
         setContentView(R.layout.activity_splash_screen);
 
 
-
         {
             LinearLayout logoImageView = (LinearLayout) findViewById(R.id.logo);
             ObjectAnimator anim = ObjectAnimator.ofFloat(logoImageView, "translationY", -60);

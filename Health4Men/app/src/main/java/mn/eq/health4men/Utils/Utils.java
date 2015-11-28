@@ -56,7 +56,7 @@ public class Utils {
     public static ProgressDialog getProgressDialog(Context context, String message) {
         ProgressDialog progressDialog = new ProgressDialog(context);
         progressDialog.setMessage(message);
-        progressDialog.setCancelable(false);
+        progressDialog.setCancelable(true);
         return progressDialog;
     }
 

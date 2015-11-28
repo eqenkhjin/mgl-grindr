@@ -56,10 +56,10 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
             public void onClick(View v) {
 
                 if (previousClicked != null) {
-                    previousClicked.setBackgroundColor(context.getResources().getColor(R.color.colorPrimary));
+                    previousClicked.setBackgroundColor(Color.TRANSPARENT);
                 }
 
-                holder.backLayout.setBackgroundColor(Color.parseColor("#f5936f"));
+                holder.backLayout.setBackgroundColor(Color.parseColor("#ddf5936f"));
                 previousClicked = holder.backLayout;
             }
         });

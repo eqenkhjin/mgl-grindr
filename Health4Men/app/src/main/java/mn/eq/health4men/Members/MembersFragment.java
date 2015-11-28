@@ -22,6 +22,7 @@ import com.loopj.android.http.RequestParams;
 import org.apache.http.Header;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.logging.LogRecord;
@@ -44,15 +45,11 @@ public class MembersFragment extends Fragment {
     private RecyclerView recyclerView;
     private LinearLayoutManager mLayoutManager;
     public static AdapterMembers adapterMembers;
-    public int pageIndex = 1;
-    private int perPage = 50;
     private static String TAG = "Members Fragment : ";
     private ProgressDialog progressDialog;
     public static ArrayList<UserItem> arrayList = new ArrayList<>();
     public static ArrayList<UserItem> searchArrayList = new ArrayList<>();
     public MembersFragment membersFragment;
-    public boolean isWaitResponse;
-    public boolean canContinue = true;
     private Handler handler;
     private boolean isList = true;
 
@@ -69,9 +66,10 @@ public class MembersFragment extends Fragment {
 
         handler = new Handler();
 
-
-
         createInterface();
+
+        arrayList.clear();
+        searchArrayList.clear();
 
         getMembers();
 
@@ -141,7 +139,6 @@ public class MembersFragment extends Fragment {
 
     public void getMembers() {
 
-        if (!canContinue)return;
 
         if (SplachScreenActivity.utils.isNetworkConnected(getActivity())) {
 
@@ -149,8 +146,6 @@ public class MembersFragment extends Fragment {
 
             RequestParams params = new RequestParams();
             params.put("user_id",SplachScreenActivity.userItem.getUserID());
-            params.put("page", pageIndex);
-            params.put("per_page", perPage);
 
             System.out.println(TAG + "url : " + url);
             System.out.println(TAG + "param : " + params.toString());
@@ -179,8 +174,6 @@ public class MembersFragment extends Fragment {
 
                     }
 
-                    if (response.length() < perPage)canContinue = false;
-
                     adapterMembers.notifyDataSetChanged();
 
                 }
@@ -192,6 +185,19 @@ public class MembersFragment extends Fragment {
                     SplachScreenActivity.utils.showToast("Сервертэй холбогдоход алдаа гарлаа");
                 }
 
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    super.onFailure(statusCode, headers, throwable, errorResponse);
+                    if (progressDialog.isShowing()) progressDialog.dismiss();
+                    SplachScreenActivity.utils.showToast("Сервертэй холбогдоход алдаа гарлаа");
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                    super.onFailure(statusCode, headers, responseString, throwable);
+                    if (progressDialog.isShowing()) progressDialog.dismiss();
+                    SplachScreenActivity.utils.showToast("Сервертэй холбогдоход алдаа гарлаа");
+                }
             });
 
         } else {

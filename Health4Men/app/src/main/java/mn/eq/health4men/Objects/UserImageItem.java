@@ -13,16 +13,18 @@ public class UserImageItem implements Serializable {
     private int imageId;
     private String imageURL;
     private boolean canShow;
-
+    private int type;
+    private boolean isDeletable;
 
     public UserImageItem(JSONObject object) throws JSONException {
 
 
         if (object.getInt("type") == 0)this.canShow = true;
         else this.canShow = false;
-
+        this.type = object.getInt("type");
         this.imageURL = object.getString("picture");
         this.imageId = object.getInt("id");
+        this.isDeletable = false;
     }
 
     public String getImageURL() {
@@ -50,5 +52,21 @@ public class UserImageItem implements Serializable {
     }
     public int getImageId(){
         return imageId;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public boolean isDeletable() {
+        return isDeletable;
+    }
+
+    public void setIsDeletable(boolean isDeletable) {
+        this.isDeletable = isDeletable;
     }
 }

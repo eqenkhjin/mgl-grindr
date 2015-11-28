@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
     android:id="@+id/toolbar"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
-    android:background="@color/colorPrimary">
+    android:background="@color/colorPrimary"
+    android:elevation="4dp">
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <LinearLayout
+            android:id="@+id/toolbarLayout"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:id="@+id/toolbarLayout"
             android:orientation="horizontal"
             >
 
@@ -24,7 +26,7 @@
                 android:layout_marginLeft="6dp"
                 android:background="?attr/selectableItemBackground"
                 android:padding="12dp"
-                android:src="@drawable/menu_icon" />
+                android:src="@drawable/menu_icon"/>
 
             <TextView
                 android:id="@+id/toolbarTitle"
@@ -32,20 +34,20 @@
                 android:layout_height="match_parent"
                 android:gravity="left|center_vertical"
                 android:textColor="@android:color/white"
-                android:textSize="20sp" />
+                android:textSize="20sp"/>
 
         </LinearLayout>
 
         <EditText
+            android:id="@+id/searchEditText"
             android:layout_width="250dp"
             android:layout_height="match_parent"
-            android:id="@+id/searchEditText"
             android:layout_gravity="center_vertical|left"
-            android:hint="Search for username"
-            android:textColorHint="@android:color/white"
-            android:textColor="@android:color/white"
-            android:textSize="16sp"
             android:layout_marginLeft="16dp"
+            android:hint="Search for username"
+            android:textColor="@android:color/white"
+            android:textColorHint="@android:color/white"
+            android:textSize="16sp"
             android:visibility="gone"/>
 
     </FrameLayout>
@@ -54,59 +56,58 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="right|center_vertical">
+        android:layout_gravity="right|center_vertical"
+        android:orientation="horizontal">
 
         <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|right"
+            android:layout_marginRight="6dp"
             android:background="?attr/selectableItemBackground"
-            android:src="@drawable/search"
             android:padding="12dp"
-            android:layout_marginRight="6dp"/>
+            android:src="@drawable/search"/>
 
 
         <ImageButton
+            android:id="@+id/whiteStar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/whiteStar"
             android:layout_gravity="center_vertical|right"
+            android:layout_marginRight="6dp"
             android:background="?attr/selectableItemBackground"
-            android:src="@drawable/checkbox_selector"
             android:padding="12dp"
-            android:layout_marginRight="6dp"/>
+            android:src="@drawable/checkbox_selector"/>
 
     </LinearLayout>
 
 
-
     <LinearLayout
+        android:id="@+id/done"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:id="@+id/done"
+        android:layout_gravity="right"
+        android:background="#bbbbbb"
         android:orientation="horizontal"
         android:padding="12dp"
-        android:background="#bbbbbb"
-        android:layout_gravity="right"
         android:visibility="gone">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/check"
-            android:layout_gravity="center_vertical"/>
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/check"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="8dp"
             android:text="done"
             android:textColor="@android:color/white"
             android:textSize="16sp"
-            android:textStyle="bold"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="8dp"/>
+            android:textStyle="bold"/>
 
     </LinearLayout>
 

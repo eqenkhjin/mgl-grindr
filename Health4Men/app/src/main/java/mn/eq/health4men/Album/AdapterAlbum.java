@@ -6,12 +6,15 @@ package mn.eq.health4men.Album;
 
 import android.content.Context;
 import android.location.Location;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.CheckBox;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -39,21 +42,23 @@ public class AdapterAlbum extends RecyclerView.Adapter<AdapterAlbum.ViewHolder> 
     private ArrayList<UserImageItem> mDataset;
     private Context context;
     private int lastPosition = -1;
-//    public MembersFragment membersFragment;
+    public boolean isDeletable;
+    public MyAlbum myAlbum;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
 
-        public RelativeLayout layout;
+        public FrameLayout layout;
         public ImageView albumImage;
         public View view;
+        public CheckBox checkBox;
 
         public ViewHolder(View v) {
             super(v);
-            layout = (RelativeLayout) v.findViewById(R.id.row_album_relative);
+            layout = (FrameLayout) v.findViewById(R.id.row_album_relative);
             albumImage = (ImageView) v.findViewById(R.id.row_album_img);
             albumImage.getLayoutParams().height = MainActivity.deviceWidth/2;
-
+            checkBox = (CheckBox) v.findViewById(R.id.good_checkbox);
 
         }
     }
@@ -68,10 +73,10 @@ public class AdapterAlbum extends RecyclerView.Adapter<AdapterAlbum.ViewHolder> 
         notifyItemRemoved(position);
     }
 
-    public AdapterAlbum(Context context, ArrayList<UserImageItem> myDataset) {
-        this.isList = isList;
+    public AdapterAlbum(Context context, ArrayList<UserImageItem> myDataset,MyAlbum myAlbum) {
         this.context = context;
         mDataset = myDataset;
+        this.myAlbum = myAlbum;
     }
 
     @Override
@@ -84,7 +89,7 @@ public class AdapterAlbum extends RecyclerView.Adapter<AdapterAlbum.ViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
 
 //        if (position == mDataset.size() - 1){
 //            if (!membersFragment.isWaitResponse){
@@ -93,12 +98,31 @@ public class AdapterAlbum extends RecyclerView.Adapter<AdapterAlbum.ViewHolder> 
 //            }
 //        }
 
-        UserImageItem albumItem = mDataset.get(position);
+        if (isDeletable){
+            holder.checkBox.setVisibility(View.VISIBLE);
+        }else {
+            holder.checkBox.setVisibility(View.GONE);
+        }
+
+        final UserImageItem albumItem = mDataset.get(position);
         if (albumItem.getImageURL().length() > 3) {
             Picasso.with(context).load(albumItem.getImageURL()).into(holder.albumImage);
         } else {
             holder.albumImage.setImageResource(R.drawable.placholder_member);
         }
+
+        holder.layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (isDeletable){
+                    holder.checkBox.setChecked(!holder.checkBox.isChecked());
+                    albumItem.setIsDeletable(holder.checkBox.isChecked());
+                }else {
+                    myAlbum.showLibrary(position);
+                }
+            }
+        });
 
     }
 

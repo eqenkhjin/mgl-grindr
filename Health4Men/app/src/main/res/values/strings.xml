@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">Health4men</string>
-    <string name="app_name_mn">Health4men</string>
+    <string name="app_name">4men</string>
+    <string name="app_name_mn">4men</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>

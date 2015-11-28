@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Point;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.CountDownTimer;
 import android.support.design.widget.FloatingActionButton;
@@ -41,14 +42,26 @@ import com.loopj.android.http.RequestParams;
 import com.squareup.picasso.Picasso;
 
 import org.apache.http.Header;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 import mn.eq.health4men.Album.MyAlbum;
+import mn.eq.health4men.Chat.ChatRoomActivity;
 import mn.eq.health4men.LeftMenu.FragmentDrawer;
 import mn.eq.health4men.Login.LoginActivity;
 import mn.eq.health4men.Map.FragmentMap;
@@ -59,10 +72,10 @@ import mn.eq.health4men.R;
 import mn.eq.health4men.Root.RootActivity;
 import mn.eq.health4men.UserEdit.PopUpFragment;
 import mn.eq.health4men.UserEdit.ProfileEditFragment;
+import mn.eq.health4men.Utils.AndroidMultiPartEntity;
 import mn.eq.health4men.Utils.Utils;
 
-public class MainActivity extends RootActivity implements FragmentDrawer.FragmentDrawerListener, GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
+public class MainActivity extends RootActivity implements FragmentDrawer.FragmentDrawerListener {
 
     private FragmentDrawer drawerFragment;
     private DrawerLayout drawerLayout;
@@ -76,12 +89,10 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
     private static String TAG = "MAIN ACTIVITY : ";
     private ProgressDialog progressDialog;
     private ProgressDialog logOutDialog;
-    private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 1000;
-    private GoogleApiClient mGoogleApiClient;
+    private ProgressDialog editDialog;
     private MembersFragment membersFragment;
 
     public MainActivity mainActivity;
-    public static Location mLastLocation;
     public static ImageButton whiteStar;
     public static int deviceWidth;
     public static int deviceHeight;
@@ -92,6 +103,8 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
     private boolean onlineRequestFinished = true,isSearchEnabled = false;
     private LinearLayout toolbarLayout;
     private EditText searchEditText;
+    public static String imageURL;
+    private MyAlbum myAlbum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,10 +136,17 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
     private void createInterface() {
         progressDialog = new Utils().getProgressDialog(this, "Logging in");
         logOutDialog = new Utils().getProgressDialog(this,"Logging out");
-
+        editDialog = new Utils().getProgressDialog(this,"Editing user information");
         toolbar = (FrameLayout) findViewById(R.id.toolbar);
 
         msgButton = (FloatingActionButton) findViewById(R.id.msgButton);
+        msgButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, ChatRoomActivity.class);
+                startActivity(intent);
+            }
+        });
 
         done = (LinearLayout) findViewById(R.id.done);
 
@@ -198,11 +218,6 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
         toolbarLayout = (LinearLayout) findViewById(R.id.toolbarLayout);
 
         displayView(0);
-
-        if (checkPlayServices()) {
-
-            buildGoogleApiClient();
-        }
 
         isOnlineRequest();
 
@@ -290,13 +305,10 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
     }
 
     private void changeIsOnline(IsOnline isOnline) {
-        System.out.println(TAG + "CHANGE IS ONLINE");
 
         for (UserItem userItem : MembersFragment.arrayList) {
 
             if (userItem.getUserID() == isOnline.getUserID()) {
-
-                System.out.println(TAG + userItem.getUserName());
 
                 userItem.setMemberOnline(isOnline.isOnline());
                 return;
@@ -352,8 +364,9 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
         if (position == 1) {
             title = "My album";
 
-            fragment = new MyAlbum();
+            myAlbum = new MyAlbum();
 
+            fragment = myAlbum;
             msgButton.setVisibility(View.GONE);
             done.setVisibility(View.GONE);
         }
@@ -398,73 +411,10 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
 
         if (SplachScreenActivity.utils.isNetworkConnected(this)) {
 
-            String url = Utils.MAIN_HOST + "user_update.php";
-            SplachScreenActivity.userItem.setUserName(ProfileEditFragment.userNameEditText.getText().toString());
-            SplachScreenActivity.userItem.setUserAboutme(ProfileEditFragment.aboutUserEditText.getText().toString());
+            if (!editDialog.isShowing())editDialog.show();
 
-            RequestParams params = new RequestParams();
-            params.put("id", SplachScreenActivity.userItem.getUserID());
-            params.put("age", SplachScreenActivity.userItem.getUserAge());
-            params.put("name", SplachScreenActivity.userItem.getUserName());
-            params.put("height", SplachScreenActivity.userItem.getUserHeight());
-            params.put("weight", SplachScreenActivity.userItem.getUserWeight());
-            params.put("country", SplachScreenActivity.userItem.getUserCountry());
-            params.put("looking_for", SplachScreenActivity.userItem.getUserLookingFor());
-            params.put("relationship_status", SplachScreenActivity.userItem.getUserRelationshipStatus());
-            params.put("about_me", SplachScreenActivity.userItem.getUserAboutme());
-            params.put("role",SplachScreenActivity.userItem.getUserBodyType());
-
-            System.out.println(TAG + "url : " + url);
-            System.out.println(TAG + "param : " + params.toString());
-
-            if (!progressDialog.isShowing()) progressDialog.show();
-
-            Utils.client.post(url, params, new JsonHttpResponseHandler() {
-
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    super.onSuccess(statusCode, headers, response);
-
-                    if (progressDialog.isShowing()) progressDialog.dismiss();
-                    System.out.println(TAG + "UPDATE SUCCESS" + response.toString());
-
-                    if (response.has("success")) {
-
-                        try {
-                            if (response.getInt("success") == 0) {
-                                SplachScreenActivity.utils.showAlert(MainActivity.this, response.getString("message"));
-                            } else {
-                                SplachScreenActivity.utils.showAlert(MainActivity.this,
-                                        "Information succesfully sent");
-
-                                FragmentDrawer.userNameTextView.setText(SplachScreenActivity.userItem.getUserName());
-                                FragmentDrawer.userEmailTextView.setText(SplachScreenActivity.userItem.getUserEmail());
-
-                                if (SplachScreenActivity.userItem.getUserImageURL().length() > 3){
-                                    Picasso.with(MainActivity.this).load(SplachScreenActivity
-                                            .userItem.getUserImageURL()).placeholder(R.drawable.placholder_member)
-                                            .into
-                                            (FragmentDrawer
-                                            .userImageView);
-                                }else {
-                                    FragmentDrawer.userImageView.setImageResource(R.drawable.placholder_member);
-                                }
-
-
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    super.onFailure(statusCode, headers, throwable, errorResponse);
-                    if (progressDialog.isShowing()) progressDialog.dismiss();
-                    SplachScreenActivity.utils.showToast("Сервертэй холбогдоход алдаа гарлаа");
-                }
-            });
+            new UploadFileToServer().execute();
+            return;
 
         } else {
             SplachScreenActivity.utils.showNoInternetAlert(MainActivity.this);
@@ -472,63 +422,17 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
 
     }
 
-    private boolean checkPlayServices() {
-        int resultCode = GooglePlayServicesUtil
-                .isGooglePlayServicesAvailable(this);
-        if (resultCode != ConnectionResult.SUCCESS) {
-            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
-                GooglePlayServicesUtil.getErrorDialog(resultCode, this,
-                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
-            } else {
-                Toast.makeText(getApplicationContext(),
-                        "Please update your Google Play Service. We're cant get your location.", Toast.LENGTH_LONG)
-                        .show();
-            }
-            return false;
-        }
-        return true;
-    }
-
-    protected synchronized void buildGoogleApiClient() {
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API).build();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if (mGoogleApiClient != null) {
-            mGoogleApiClient.connect();
-        }
-    }
-
-    @Override
-    public void onConnected(Bundle bundle) {
-        mLastLocation = LocationServices.FusedLocationApi
-                .getLastLocation(mGoogleApiClient);
-
-        if (membersFragment != null) {
-            membersFragment.adapterMembers.notifyDataSetChanged();
-        }
-
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-
-    }
-
     @Override
     public void onBackPressed() {
 
-        if (isSearchEnabled){
+        if (MyAlbum.isPopUpShowed){
+            try {
+                myAlbum.hide();
+
+            }catch (Exception e){
+
+            }
+        }else if (isSearchEnabled){
             showMenu();
         }else {
             new AlertDialog.Builder(this)
@@ -557,11 +461,8 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
             String url = Utils.MAIN_HOST + "mobile_online.php";
 
             RequestParams params = new RequestParams();
-            params.put("id",SplachScreenActivity.userItem.getUserID());
+            params.put("id", SplachScreenActivity.userItem.getUserID());
             params.put("is_online", 0);
-
-            System.out.println("LOG OUT : URL ->" + url);
-            System.out.println("LOG OUT : PARAMS ->"+params);
 
             if (!logOutDialog.isShowing()) logOutDialog.show();
 
@@ -610,18 +511,15 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
     protected void onDestroy() {
         super.onDestroy();
 
-        System.out.println("ON DESTROY");
 
         if (SplachScreenActivity.utils.isNetworkConnected(this)) {
 
             String url = Utils.MAIN_HOST + "mobile_online.php";
 
             RequestParams params = new RequestParams();
-            params.put("id",SplachScreenActivity.userItem.getUserID());
+            params.put("id", SplachScreenActivity.userItem.getUserID());
             params.put("is_online", 0);
 
-            System.out.println("LOG OUT : URL ->" + url);
-            System.out.println("LOG OUT : PARAMS ->"+params);
 
             Utils.client.post(url,params, new JsonHttpResponseHandler() {
 
@@ -644,18 +542,14 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
     protected void onStop() {
         super.onStop();
 
-        System.out.println("ON STOP");
 
         if (SplachScreenActivity.utils.isNetworkConnected(this)) {
 
             String url = Utils.MAIN_HOST + "mobile_online.php";
 
             RequestParams params = new RequestParams();
-            params.put("id",SplachScreenActivity.userItem.getUserID());
+            params.put("id", SplachScreenActivity.userItem.getUserID());
             params.put("is_online", 0);
-
-            System.out.println("LOG OUT : URL ->" + url);
-            System.out.println("LOG OUT : PARAMS ->"+params);
 
             Utils.client.post(url,params, new JsonHttpResponseHandler() {
 
@@ -682,11 +576,9 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
             String url = Utils.MAIN_HOST + "mobile_online.php";
 
             RequestParams params = new RequestParams();
-            params.put("id",SplachScreenActivity.userItem.getUserID());
+            params.put("id", SplachScreenActivity.userItem.getUserID());
             params.put("is_online", 1);
 
-            System.out.println("LOG OUT : URL ->" + url);
-            System.out.println("LOG OUT : PARAMS ->"+params);
 
             Utils.client.post(url,params, new JsonHttpResponseHandler() {
 
@@ -703,5 +595,140 @@ public class MainActivity extends RootActivity implements FragmentDrawer.Fragmen
         }else {
 
         }
+    }
+
+    private class UploadFileToServer extends AsyncTask<Void, Integer, String> {
+        @Override
+        protected void onPreExecute() {
+            // setting progress bar to zero
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... progress) {
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            return uploadFile();
+        }
+
+        @SuppressWarnings("deprecation")
+        private String uploadFile() {
+            String responseString = null;
+
+            HttpClient httpclient = new DefaultHttpClient();
+            HttpPost httppost = new HttpPost(Utils.MAIN_HOST + "user_update.php");
+
+            try {
+                AndroidMultiPartEntity entity = new AndroidMultiPartEntity(
+                        new AndroidMultiPartEntity.ProgressListener() {
+
+                            @Override
+                            public void transferred(long num) {
+                            }
+                        });
+
+
+                if (imageURL != null){
+
+                    try {
+                        File sourceFile = new File(imageURL);
+                        entity.addPart("profile_url", new FileBody(sourceFile));
+                    }catch (Exception e){
+
+                    }
+
+                }
+
+
+                entity.addPart("id", new StringBody(SplachScreenActivity.userItem
+                        .getUserID()+""));
+                entity.addPart("age", new StringBody(SplachScreenActivity.userItem.getUserAge()));
+                entity.addPart("name", new StringBody(ProfileEditFragment.userNameEditText
+                        .getText().toString()));
+                entity.addPart("height", new StringBody(SplachScreenActivity.userItem.getUserHeight()));
+                entity.addPart("weight", new StringBody(SplachScreenActivity.userItem.getUserWeight()));
+                entity.addPart("country", new StringBody(SplachScreenActivity.userItem.getUserCountry()));
+                entity.addPart("looking_for", new StringBody(SplachScreenActivity.userItem.getUserLookingFor()));
+                entity.addPart("about_me", new StringBody(ProfileEditFragment.aboutUserEditText
+                        .getText().toString()));
+                entity.addPart("role", new StringBody(SplachScreenActivity.userItem.getUserBodyType()));
+
+                SplachScreenActivity.userItem.setUserName(ProfileEditFragment.userNameEditText.getText
+                        ().toString());
+                SplachScreenActivity.userItem.setUserAboutme(ProfileEditFragment.aboutUserEditText.getText
+                        ().toString());
+
+                httppost.setEntity(entity);
+
+                HttpResponse response = httpclient.execute(httppost);
+                HttpEntity r_entity = response.getEntity();
+
+                int statusCode = response.getStatusLine().getStatusCode();
+                if (statusCode == 200) {
+                    responseString = EntityUtils.toString(r_entity);
+                } else {
+                    responseString = "Error occurred! Http Status Code: "
+                            + statusCode;
+                }
+
+            } catch (ClientProtocolException e) {
+                responseString = e.toString();
+            } catch (IOException e) {
+                responseString = e.toString();
+            }
+
+            return responseString;
+
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+            JSONObject response = null;
+            try {
+                response = new JSONObject(result);
+
+
+                if (response.getInt("success") == 1) {
+
+                    try {
+                        Picasso.with(MainActivity.this).load(response.getString("profile_url")).placeholder(R.drawable
+                                .placholder_member).into
+                                (FragmentDrawer.userImageView);
+
+
+                    }catch (Exception e){
+
+                    }
+
+                    FragmentDrawer.userNameTextView.setText(ProfileEditFragment
+                            .userNameEditText.getText().toString());
+
+                    if (editDialog.isShowing())editDialog.dismiss();
+                    SplachScreenActivity.utils.showAlert(MainActivity.this,
+                            "Information succesfully edited");
+                    imageURL = null;
+
+                }else {
+                    SplachScreenActivity.utils.showAlert(MainActivity.this, getString(R.string
+                            .server_error));
+
+                    if (editDialog.isShowing())editDialog.dismiss();
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+                SplachScreenActivity.utils.showAlert(MainActivity.this, getString(R.string
+                        .server_error));
+
+                if (editDialog.isShowing())editDialog.dismiss();
+            }
+
+
+            super.onPostExecute(result);
+        }
+
     }
 }

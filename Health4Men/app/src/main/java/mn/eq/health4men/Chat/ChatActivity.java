@@ -89,13 +89,10 @@ public class ChatActivity extends FragmentActivity {
     public ArrayList<ChatItem> arrayList = new ArrayList<ChatItem>();
     public ImageView send;
     public EditText message;
-    private boolean isFirstLaunch = true, isLastGetting = false, isFirstGetting = false;
-    private int lastMessageIndex, firstMessageIndex, index = 0;
+    private boolean isFirstLaunch = true;
     public static ChatActivity chatActivity;
     public static String TAG = "Chat activity : ";
-    public ImageView nochatImageView;
     CountDownTimer timer;
-    private int messageID, childID;
     private ProgressDialog progressDialog;
     private UserItem userItem;
     public Uri fileUri;
@@ -104,7 +101,7 @@ public class ChatActivity extends FragmentActivity {
     private static final String IMAGE_DIRECTORY_NAME = "health4men";
     public static final int MEDIA_TYPE_VIDEO = 2;
     private ImageView addImageView;
-    private String imageURL = "";
+    private String imageURL;
     public static boolean isPopupShowed = false;
     private ImageFragment imageFragment;
     private FragmentManager fragmentManager;
@@ -137,11 +134,7 @@ public class ChatActivity extends FragmentActivity {
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (message.getText().length() > 0) {
-                    sendMessage();
-                } else {
-
-                }
+                sendMessage();
             }
         });
     }
@@ -286,8 +279,6 @@ public class ChatActivity extends FragmentActivity {
                         }
 
                         arrayList.add((response.length() - 1) - i, chatItem);
-                        if (i == (response.length() - 1)) firstMessageIndex = chatItem.chatID;
-                        if (isFirstLaunch && i == 0) lastMessageIndex = chatItem.chatID;
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -295,14 +286,22 @@ public class ChatActivity extends FragmentActivity {
 
                 }
 
-                mainListView.setSelection(arrayList.size() - 1);
+                if (isFirstLaunch){
+
+                    try {
+                        mainListView.setSelection(arrayList.size() - 1);
+                    }catch (Exception e){
+
+                    }
+
+                    isFirstLaunch = false;
+                }
 
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
-                isFirstGetting = false;
 
                 if (progressDialog.isShowing()) progressDialog.dismiss();
                 if (isFirstLaunch) {
@@ -470,6 +469,9 @@ public class ChatActivity extends FragmentActivity {
                         Locale.getDefault()).format(new Date());
                 File f = new File(Environment.getExternalStorageDirectory()
                         + File.separator + timeStamp + "_homework.jpg");
+
+                imageURL = f.getPath();
+
                 try {
                     f.createNewFile();
                     FileOutputStream fo = new FileOutputStream(f);
@@ -525,9 +527,11 @@ public class ChatActivity extends FragmentActivity {
                             }
                         });
 
-                File sourceFile = new File(imageURL);
+                if (imageURL != null){
 
-                entity.addPart("picture", new FileBody(sourceFile));
+                    File sourceFile = new File(imageURL);
+                    entity.addPart("picture", new FileBody(sourceFile));
+                }
 
                 entity.addPart("from_user", new StringBody(SplachScreenActivity.userItem
                         .getUserID()+""));
@@ -550,10 +554,8 @@ public class ChatActivity extends FragmentActivity {
 
             } catch (ClientProtocolException e) {
                 responseString = e.toString();
-                SplachScreenActivity.utils.showToast("Сервертэй холбогдоход алдаа гарлаа");
             } catch (IOException e) {
                 responseString = e.toString();
-                SplachScreenActivity.utils.showToast("Сервертэй холбогдоход алдаа гарлаа");
             }
 
             return responseString;
@@ -563,6 +565,8 @@ public class ChatActivity extends FragmentActivity {
         @Override
         protected void onPostExecute(String result) {
 
+            System.out.println("WEWE : "+result);
+
             JSONObject response = null;
             try {
                 response = new JSONObject(result);
@@ -570,6 +574,7 @@ public class ChatActivity extends FragmentActivity {
                 if (response.getInt("success") == 1) {
                     message.setText("");
                     addImageView.setImageResource(R.drawable.image);
+                    imageURL = null;
                 } else {
                     SplachScreenActivity.utils.showToast("Сервертэй холбогдоход алдаа гарлаа");
                 }
